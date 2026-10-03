@@ -97,9 +97,9 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-  <!-- ================= 頂部狀態欄（精簡版，已將體力下移） ================= -->
+  <!-- ================= 頂部狀態欄（精簡版，帶有等級與經驗值條） ================= -->
   <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
-    <!-- 個人資料入口 -->
+    <!-- 個人資料入口 (含等級經驗條展示) -->
     <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
       <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         <i class="fa-solid fa-user-astronaut"></i>
@@ -109,7 +109,13 @@
           <span id="user-title-display" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/60 whitespace-nowrap inline-block shrink-0 leading-none">初心召喚師</span>
           <span id="user-name-display" class="font-bold text-xs text-slate-100 whitespace-nowrap">冒險者</span>
         </div>
-        <div class="text-[9px] text-slate-400 leading-tight">等級 <span id="user-level">1</span></div>
+        <!-- 等級與經驗進度條 -->
+        <div class="flex items-center gap-1.5 mt-0.5">
+          <span class="text-[9px] text-amber-400 font-black">Lv.<span id="user-level">1</span></span>
+          <div class="w-14 bg-slate-800 h-1.5 rounded-full overflow-hidden border border-slate-700">
+            <div id="user-exp-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300" style="width: 0%;"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -181,9 +187,9 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot"></i> 戰役章節
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5">每次挑戰消耗 1 點體力。通關可得物資靈石並解鎖成就！</p>
+            <p class="text-xs text-slate-400 mt-0.5">每次挑戰消耗 1 點體力。通關獲取經驗升級，解鎖更強戰力！</p>
           </div>
-          <!-- 體力愛心與倒數計時膠囊移至此處 -->
+          <!-- 體力愛心與倒數計時膠囊 -->
           <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-2xl border border-rose-500/40 shadow-lg whitespace-nowrap shrink-0" title="體力（每5分鐘恢復1點）">
             <i class="fa-solid fa-heart text-rose-500 text-sm animate-pulse"></i>
             <span id="stamina-display" class="text-rose-200 text-xs font-bold">5/5</span>
@@ -368,7 +374,7 @@
     </button>
   </nav>
 
-  <!-- ================= 彈窗層：個人資料、頭像、稱號與審核制好友系統 ================= -->
+  <!-- ================= 彈窗層：個人資料、頭像、稱號與等級經驗詳細 ================= -->
   <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -376,6 +382,31 @@
           <i class="fa-solid fa-id-card"></i> 召喚師個人檔案
         </h3>
         <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- 等級與升級進度卡 -->
+      <div class="bg-gradient-to-r from-indigo-950 to-slate-900 p-3.5 rounded-xl border border-indigo-500/40 space-y-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-xs text-slate-400">當前召喚師階級</div>
+            <div class="text-lg font-black text-amber-300 flex items-center gap-1.5">
+              <span>LEVEL <span id="profile-level-val">1</span></span>
+              <span id="profile-title-val" class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-600/50">初心召喚師</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-slate-400">升級經驗</span>
+            <div id="profile-exp-text" class="text-xs font-bold text-slate-200">0 / 100 EXP</div>
+          </div>
+        </div>
+        <!-- 經驗條 -->
+        <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-700">
+          <div id="profile-exp-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300" style="width: 0%;"></div>
+        </div>
+        <div class="text-[10px] text-slate-400 flex justify-between pt-0.5">
+          <span><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>通關戰役可獲取大量經驗值</span>
+          <span class="text-emerald-400">升級恢復滿體力</span>
+        </div>
       </div>
 
       <!-- ID 與修改名號 -->
@@ -435,7 +466,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：成就系統（含未達成 / 已達成雙分頁） ================= -->
+  <!-- ================= 彈窗層：成就系統 ================= -->
   <div id="modal-achievements" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-yellow-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -554,7 +585,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：戰鬥結算彈窗 ================= -->
+  <!-- ================= 彈窗層：戰鬥結算彈窗 (顯示獲得經驗) ================= -->
   <div id="modal-battle-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="battle-result-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-trophy"></i></div>
@@ -564,6 +595,25 @@
       </div>
       <button onclick="exitBattle()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">
         返回戰役地圖
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗層：召喚師等級提升特效彈窗 (LEVEL UP!) ================= -->
+  <div id="modal-level-up" class="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 hidden">
+    <div class="max-w-xs w-full bg-gradient-to-b from-amber-950/80 via-slate-900 to-slate-950 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-4 shadow-[0_0_50px_rgba(250,204,21,0.5)] animate-bounce">
+      <div class="text-6xl text-amber-400"><i class="fa-solid fa-shield-halved"></i></div>
+      <div>
+        <h2 class="title-font text-3xl font-black text-amber-300 tracking-wider">LEVEL UP!</h2>
+        <p class="text-xs text-amber-200 mt-1 font-bold">召喚師等級提升至 <span id="levelup-new-lvl" class="text-lg text-white">2</span> 級！</p>
+      </div>
+      <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-xs text-left text-slate-300 space-y-1">
+        <div class="text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>體力恢復至上限 (5/5)</div>
+        <div class="text-amber-300 font-bold"><i class="fa-solid fa-coins mr-1"></i>獲得晉升金幣 +200</div>
+        <div class="text-sky-400 font-bold"><i class="fa-solid fa-gem mr-1"></i>獲得幻獸強化石 +3</div>
+      </div>
+      <button onclick="closeLevelUpModal()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm rounded-xl transition shadow-lg">
+        領取晉升榮耀
       </button>
     </div>
   </div>
@@ -597,7 +647,6 @@
   <script>
     /* ================= 1. 幻獸資料庫 ================= */
     const MONSTER_DB = [
-      // 初階怪獸 (No.001 ~ No.011)
       { id: 1, name: "青芽草泥球", rarity: "N", element: "grass", cost: 1, baseAtk: 14, baseHp: 28, desc: "未受傷時自我修復 8 點生命", faIcon: "fa-seedling", evolvableTo: 101 },
       { id: 2, name: "赤耳火狐", rarity: "N", element: "fire", cost: 1, baseAtk: 18, baseHp: 18, desc: "【突襲】登場可立即發動攻擊", faIcon: "fa-fire", evolvableTo: 102 },
       { id: 3, name: "藍泡小靈龜", rarity: "N", element: "water", cost: 1, baseAtk: 12, baseHp: 36, desc: "【硬殼】首次受傷降低 10 點", faIcon: "fa-shield-heart", evolvableTo: 103 },
@@ -610,7 +659,6 @@
       { id: 10, name: "星穹噬光獸", rarity: "SSR", element: "void", cost: 6, baseAtk: 52, baseHp: 60, desc: "登場隨機秒殺一隻敵方怪獸！", faIcon: "fa-meteor", evolvableTo: 110 },
       { id: 11, name: "起源白晝鹿", rarity: "SSR", element: "light", cost: 6, baseAtk: 40, baseHp: 75, desc: "每回合開始恢復主角 15 點生命", faIcon: "fa-sun", evolvableTo: 111 },
 
-      // 究極進化形態 (No.101 ~ No.111)
       { id: 101, name: "繁花霸王蔓", rarity: "SR", element: "grass", cost: 3, baseAtk: 38, baseHp: 62, desc: "【覺醒】回合結束修復全隊 10 點生命", faIcon: "fa-clover", evolvableTo: null },
       { id: 102, name: "九霄熾焰狐", rarity: "SR", element: "fire", cost: 3, baseAtk: 46, baseHp: 45, desc: "【覺醒突襲】登場直接對敵全體噴火 15 傷", faIcon: "fa-fire-flame-curved", evolvableTo: null },
       { id: 103, name: "鎮海玄冰神龜", rarity: "SR", element: "water", cost: 3, baseAtk: 30, baseHp: 85, desc: "【覺醒護甲】受到的所有傷害減免 30%", faIcon: "fa-shield", evolvableTo: null },
@@ -624,20 +672,21 @@
       { id: 111, name: "創世極晝天鹿", rarity: "SSR", element: "light", cost: 7, baseAtk: 58, baseHp: 105, desc: "【聖光普照】每回合開始全隊恢復 25 點生命", faIcon: "fa-star-of-david", evolvableTo: null }
     ];
 
-    /* ================= 2. 戰役章節資料庫 ================= */
+    /* ================= 2. 戰役章節資料庫 (含通關經驗值) ================= */
     const STAGES_DB = [
-      { id: 1, title: "第 1 區：微光森林外圍", desc: "草水小怪出沒，掉落蒼翠靈石與強化石。", bossName: "森林巨蜂王", bossElement: "grass", bossHp: 70, bossIcon: "fa-bug", rewardGold: 220, dropStone: 3, dropMaterial: "grass_stone", deck: [1, 3, 4] },
-      { id: 2, title: "第 2 區：灼熱焦土裂谷", desc: "烈焰怪獸攻勢兇猛，掉落烈焰結晶！", bossName: "熔岩魔石像", bossElement: "fire", bossHp: 110, bossIcon: "fa-mountain", rewardGold: 380, dropStone: 4, dropMaterial: "fire_stone", deck: [2, 5, 8] },
-      { id: 3, title: "第 3 區：深淵海溝神殿", desc: "沉睡水系巨獸，掉落深海秘珠！", bossName: "幻海利維坦", bossElement: "water", bossHp: 150, bossIcon: "fa-anchor", rewardGold: 550, dropStone: 5, dropMaterial: "water_stone", deck: [3, 6, 9] },
-      { id: 4, title: "第 4 區：星辰遠古祭壇", desc: "虛空裂隙打開之地，掉落頂級虛空星核！", bossName: "混沌終焉核心", bossElement: "void", bossHp: 200, bossIcon: "fa-eye", rewardGold: 1100, dropStone: 8, dropMaterial: "void_stone", deck: [7, 8, 9, 10, 11] }
+      { id: 1, title: "第 1 區：微光森林外圍", desc: "草水小怪出沒，掉落蒼翠靈石與強化石。", bossName: "森林巨蜂王", bossElement: "grass", bossHp: 70, bossIcon: "fa-bug", rewardGold: 220, rewardExp: 60, dropStone: 3, dropMaterial: "grass_stone", deck: [1, 3, 4] },
+      { id: 2, title: "第 2 區：灼熱焦土裂谷", desc: "烈焰怪獸攻勢兇猛，掉落烈焰結晶！", bossName: "熔岩魔石像", bossElement: "fire", bossHp: 110, bossIcon: "fa-mountain", rewardGold: 380, rewardExp: 90, dropStone: 4, dropMaterial: "fire_stone", deck: [2, 5, 8] },
+      { id: 3, title: "第 3 區：深淵海溝神殿", desc: "沉睡水系巨獸，掉落深海秘珠！", bossName: "幻海利維坦", bossElement: "water", bossHp: 150, bossIcon: "fa-anchor", rewardGold: 550, rewardExp: 140, dropStone: 5, dropMaterial: "water_stone", deck: [3, 6, 9] },
+      { id: 4, title: "第 4 區：星辰遠古祭壇", desc: "虛空裂隙打開之地，掉落頂級虛空星核！", bossName: "混沌終焉核心", bossElement: "void", bossHp: 200, bossIcon: "fa-eye", rewardGold: 1100, rewardExp: 220, dropStone: 8, dropMaterial: "void_stone", deck: [7, 8, 9, 10, 11] }
     ];
 
-    /* ================= 3. 成就資料庫 (重要成就才有稱號) ================= */
+    /* ================= 3. 成就資料庫 ================= */
     const ACHIEVEMENTS_DB = [
       { id: "stage_1", title: "微光破曉", desc: "成功通關第 1 區「微光森林外圍」", rewardGold: 300, rewardStone: 5, rewardTitle: null, check: p => p.clearedStages >= 1 },
       { id: "stage_4", title: "星界救世主", desc: "擊破終章第 4 區「星辰遠古祭壇」", rewardGold: 2000, rewardStone: 20, rewardTitle: "星穹弒神者", check: p => p.clearedStages >= 4 },
       { id: "collect_8", title: "初具規模", desc: "幻獸圖鑑累計收集達到 8 隻", rewardGold: 500, rewardStone: 8, rewardTitle: null, check: p => p.collection.length >= 8 },
       { id: "collect_all", title: "全圖鑑制霸", desc: "解鎖圖鑑中全部 22 隻幻獸", rewardGold: 3000, rewardStone: 30, rewardTitle: "遠古學者", check: p => p.collection.length >= 22 },
+      { id: "level_5", title: "初露崢嶸", desc: "召喚師等級提升至 5 級", rewardGold: 600, rewardStone: 6, rewardTitle: "資深召喚師", check: p => p.level >= 5 },
       { id: "upgrade_max", title: "極限突破", desc: "將任意一隻幻獸強化至滿等 (Lv.5)", rewardGold: 800, rewardStone: 10, rewardTitle: null, check: p => Object.values(p.cardLevels || {}).some(lv => lv >= 5) },
       { id: "friend_3", title: "四海皆兄弟", desc: "成功結交 3 位以上的冒險者好友", rewardGold: 400, rewardStone: 5, rewardTitle: null, check: p => (p.friends || []).length >= 3 }
     ];
@@ -651,12 +700,47 @@
       void_stone: { name: "虛空星核", icon: "fa-circle-dot", rarity: "SSR", desc: "天外隕落的微型黑洞殘核，具備扭曲現實的神秘威能。" }
     };
 
-    /* ================= 5. 玩家資料管理與體力恢復計時 (5分鐘+1) ================= */
+    /* ================= 5. 玩家資料管理、等級與體力恢復 ================= */
     let currentAccount = null;
     let player = null;
     let selectedUpgradeCardId = null;
     let isShowingCompletedAchievements = false;
     let staminaInterval = null;
+
+    // 計算升級所需經驗值公式：等級 * 100
+    function getMaxExpForLevel(lvl) {
+      return lvl * 100;
+    }
+
+    // 增加召喚師經驗值並處理連續升級
+    function addPlayerExp(amount) {
+      if (!player) return;
+      player.exp = (player.exp || 0) + amount;
+      let leveledUp = false;
+
+      while (player.exp >= getMaxExpForLevel(player.level)) {
+        player.exp -= getMaxExpForLevel(player.level);
+        player.level += 1;
+        leveledUp = true;
+        // 升級福利：補滿體力並贈送獎勵
+        player.stamina = 5;
+        player.gold += 200;
+        player.inventory.upgradeStone = (player.inventory.upgradeStone || 0) + 3;
+      }
+
+      saveCurrentPlayerData();
+      if (leveledUp) {
+        showLevelUpModal(player.level);
+      }
+    }
+
+    function showLevelUpModal(newLevel) {
+      document.getElementById('levelup-new-lvl').innerText = newLevel;
+      document.getElementById('modal-level-up').classList.remove('hidden');
+    }
+    function closeLevelUpModal() {
+      document.getElementById('modal-level-up').classList.add('hidden');
+    }
 
     function getAllAccounts() {
       const data = localStorage.getItem('monster_game_accounts');
@@ -707,6 +791,7 @@
             title: "初心召喚師",
             unlockedTitles: ["初心召喚師"],
             level: 1,
+            exp: 0,
             stamina: 5,
             lastStaminaUpdate: Date.now(),
             gold: 800,
@@ -731,6 +816,8 @@
       if (!player.id) player.id = "#" + Math.floor(1000 + Math.random() * 9000);
       if (!player.title) player.title = "初心召喚師";
       if (!player.unlockedTitles) player.unlockedTitles = ["初心召喚師"];
+      if (player.level === undefined) player.level = 1;
+      if (player.exp === undefined) player.exp = 0;
       if (player.stamina === undefined) player.stamina = 5;
       if (!player.lastStaminaUpdate) player.lastStaminaUpdate = Date.now();
       if (!player.cardLevels) player.cardLevels = {};
@@ -798,6 +885,13 @@
       document.getElementById('user-level').innerText = player.level;
       document.getElementById('gold-display').innerText = player.gold;
       
+      // 更新頂部等級經驗條
+      const maxExp = getMaxExpForLevel(player.level);
+      const expPercent = Math.min(100, Math.max(0, ((player.exp || 0) / maxExp) * 100));
+      const expBar = document.getElementById('user-exp-bar');
+      if (expBar) expBar.style.width = expPercent + '%';
+
+      // 體力更新
       const stamDisplay = document.getElementById('stamina-display');
       if (stamDisplay) stamDisplay.innerText = `${player.stamina}/5`;
 
@@ -819,6 +913,15 @@
     function openProfileModal() {
       document.getElementById('profile-my-id').innerText = player.id || "#8888";
       document.getElementById('profile-input-name').value = player.name;
+      
+      // 個人資料等級卡更新
+      document.getElementById('profile-level-val').innerText = player.level;
+      document.getElementById('profile-title-val').innerText = player.title || "初心召喚師";
+      const maxExp = getMaxExpForLevel(player.level);
+      document.getElementById('profile-exp-text').innerText = `${player.exp || 0} / ${maxExp} EXP`;
+      const expPct = Math.min(100, Math.max(0, ((player.exp || 0) / maxExp) * 100));
+      document.getElementById('profile-exp-bar').style.width = expPct + '%';
+
       renderTitlesList();
       renderFriendRequests();
       renderFriendsList();
@@ -852,6 +955,7 @@
           player.title = t;
           saveCurrentPlayerData();
           renderTitlesList();
+          openProfileModal();
         };
         container.appendChild(tag);
       });
@@ -996,7 +1100,7 @@
       alert(`已贈予好友禮物！好友回贈 50 金幣！`);
     }
 
-    /* ================= 7. 成就系統 (未達成與已達成雙分頁) ================= */
+    /* ================= 7. 成就系統 ================= */
     function openAchievementsModal() {
       switchAchievementTab(false);
       document.getElementById('modal-achievements').classList.remove('hidden');
@@ -1289,8 +1393,8 @@
           <div class="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between">
             <div class="text-[11px] text-amber-300 font-bold flex flex-wrap gap-2">
               <span>消耗 1 體力</span>
+              <span>+${stage.rewardExp} EXP</span>
               <span>+${stage.rewardGold} 金幣</span>
-              <span>+${stage.dropStone} 強化石</span>
             </div>
             <button onclick="startBattle(${stage.id})" ${isLocked ? 'disabled' : ''} 
                     class="px-4 py-1.5 rounded-lg text-xs font-black whitespace-nowrap ${isLocked ? 'bg-slate-800 text-slate-600' : 'bg-amber-500 hover:bg-amber-400 text-slate-950'} transition active:scale-95">
@@ -1741,6 +1845,7 @@
         desc.innerText = `成功擊潰首領 ${battleState.activeStage.bossName}！獲取戰利品：`;
 
         const goldEarned = battleState.activeStage.rewardGold;
+        const expEarned = battleState.activeStage.rewardExp || 50;
         const stoneEarned = battleState.activeStage.dropStone;
         const materialKey = battleState.activeStage.dropMaterial;
         const matName = MATERIAL_DB[materialKey]?.name || "專屬靈石";
@@ -1750,22 +1855,31 @@
         player.inventory[materialKey] = (player.inventory[materialKey] || 0) + 1;
 
         rewards.innerHTML = `
-          <div>+${goldEarned} 金幣</div>
-          <div>+${stoneEarned} 幻獸強化石</div>
-          <div>+1 ${matName}</div>
+          <div class="text-sky-300"><i class="fa-solid fa-sparkles mr-1"></i>+${expEarned} EXP (召喚師經驗)</div>
+          <div><i class="fa-solid fa-coins mr-1 text-amber-400"></i>+${goldEarned} 金幣</div>
+          <div><i class="fa-solid fa-gem mr-1 text-sky-400"></i>+${stoneEarned} 幻獸強化石</div>
+          <div><i class="fa-solid fa-scroll mr-1 text-emerald-400"></i>+1 ${matName}</div>
         `;
 
         if (battleState.activeStage.id > player.clearedStages) {
           player.clearedStages = battleState.activeStage.id;
         }
+
+        // 結算並增加召喚師經驗值
+        addPlayerExp(expEarned);
       } else {
         icon.innerHTML = `<i class="fa-solid fa-skull text-rose-500"></i>`;
         title.innerText = "挑戰惜敗...";
         title.className = "text-2xl font-black text-rose-500";
         desc.innerText = "召喚師陣容被擊潰，強化牌組後再次挑戰！";
-        rewards.innerHTML = `<div>+50 撫恤金</div><div>+1 強化石</div>`;
+        rewards.innerHTML = `
+          <div class="text-sky-300">+20 EXP (磨礪經驗)</div>
+          <div>+50 撫恤金</div>
+          <div>+1 強化石</div>
+        `;
         player.gold += 50;
         player.inventory.upgradeStone = (player.inventory.upgradeStone || 0) + 1;
+        addPlayerExp(20);
       }
 
       saveCurrentPlayerData();
