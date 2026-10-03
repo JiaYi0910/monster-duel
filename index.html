@@ -97,38 +97,38 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-  <!-- ================= 頂部狀態欄 ================= -->
-  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-4 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0">
-    <!-- 個人資料入口 (可點擊修改名字、頭像、稱號與好友) -->
-    <div onclick="openProfileModal()" class="flex items-center gap-2.5 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95">
-      <div id="user-avatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-sm">
+  <!-- ================= 頂部狀態欄（防換行優化版） ================= -->
+  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
+    <!-- 個人資料入口 (可點擊修改名字、稱號、好友) -->
+    <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
+      <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         召
       </div>
-      <div>
-        <div class="flex items-center gap-1.5">
-          <span id="user-title-display" class="text-[9px] px-1.5 py-0.2 rounded bg-amber-950/70 text-amber-300 border border-amber-600/50">初心召喚師</span>
-          <span id="user-name-display" class="font-bold text-sm text-slate-100">冒險者</span>
-          <i class="fa-solid fa-gear text-[10px] text-slate-400"></i>
+      <div class="flex flex-col justify-center">
+        <div class="flex items-center gap-1.5 whitespace-nowrap">
+          <span id="user-title-display" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/60 whitespace-nowrap inline-block shrink-0 leading-none">初心召喚師</span>
+          <span id="user-name-display" class="font-bold text-xs text-slate-100 whitespace-nowrap">冒險者</span>
+          <i class="fa-solid fa-gear text-[9px] text-slate-400"></i>
         </div>
-        <div class="text-[10px] text-slate-400">等級 <span id="user-level">1</span></div>
+        <div class="text-[9px] text-slate-400 leading-tight">等級 <span id="user-level">1</span></div>
       </div>
     </div>
 
-    <!-- 資源展示、成就與背包入口 -->
-    <div class="flex items-center gap-2.5 text-xs font-semibold">
-      <div class="flex items-center gap-1 bg-slate-800/90 px-2.5 py-1 rounded-full border border-amber-500/30">
-        <i class="fa-solid fa-coins text-amber-400"></i>
-        <span id="gold-display" class="text-amber-200">1000</span>
+    <!-- 資源展示、成就與背包入口 (強制單行不換行) -->
+    <div class="flex items-center gap-1.5 text-xs font-semibold shrink-0">
+      <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
+        <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
+        <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
-      <button onclick="openAchievementsModal()" class="flex items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-yellow-500/40 text-yellow-300 transition active:scale-95" title="成就系統">
-        <i class="fa-solid fa-trophy text-amber-400"></i>
-        <span class="hidden sm:inline">成就</span>
+      <button onclick="openAchievementsModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2 py-1 rounded-full border border-yellow-500/40 text-yellow-300 transition active:scale-95 whitespace-nowrap shrink-0" title="成就系統">
+        <i class="fa-solid fa-trophy text-amber-400 text-xs"></i>
+        <span class="text-[11px]">成就</span>
       </button>
-      <button onclick="openInventoryModal()" class="flex items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-indigo-500/40 text-indigo-300 transition active:scale-95" title="打開背包">
-        <i class="fa-solid fa-box-open text-indigo-400"></i>
-        <span>背包</span>
+      <button onclick="openInventoryModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2 py-1 rounded-full border border-indigo-500/40 text-indigo-300 transition active:scale-95 whitespace-nowrap shrink-0" title="打開背包">
+        <i class="fa-solid fa-box-open text-indigo-400 text-xs"></i>
+        <span class="text-[11px]">背包</span>
       </button>
-      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-2 py-1 transition" title="登出">
+      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-1.5 py-1 transition shrink-0" title="登出">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
@@ -299,7 +299,7 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-book-atlas"></i> 幻獸圖鑑百科
             </h2>
-            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/15</span>（含究極進化形態）</p>
+            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/14</span>（含究極進化形態）</p>
           </div>
         </div>
 
@@ -372,19 +372,19 @@
         <div>
           <label class="block text-xs font-bold text-slate-400 mb-1">佩戴專屬稱號</label>
           <div id="profile-titles-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1 bg-slate-950/50 rounded-lg border border-slate-800">
-            <!-- 動態載入解鎖與未解鎖稱號 -->
+            <!-- 動態載入解鎖稱號 -->
           </div>
         </div>
       </div>
 
-      <!-- 好友系統 -->
+      <!-- 好友系統 (起始空好友，可隨時新增與刪除) -->
       <div class="border-t border-slate-800 pt-3 space-y-2">
         <div class="flex justify-between items-center">
           <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
             <i class="fa-solid fa-user-group text-sky-400"></i> 好友名單 (<span id="friends-count">0</span>/20)
           </span>
-          <button onclick="addRandomFriend()" class="px-2 py-1 bg-indigo-700 hover:bg-indigo-600 text-white rounded text-[10px] font-bold">
-            + 結交新好友
+          <button onclick="addRandomFriend()" class="px-2.5 py-1 bg-indigo-700 hover:bg-indigo-600 text-white rounded text-[10px] font-bold">
+            + 結交新冒險者
           </button>
         </div>
         <div id="friends-list-container" class="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
@@ -394,7 +394,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：成就系統（領取獎勵與稱號） ================= -->
+  <!-- ================= 彈窗層：成就系統 ================= -->
   <div id="modal-achievements" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-yellow-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -422,7 +422,6 @@
 
       <p class="text-[11px] text-slate-400 text-left">點擊任一物品格子可檢視詳細檔案與用途：</p>
       
-      <!-- 經典 4x3 格子容器 -->
       <div id="inventory-grid" class="grid grid-cols-4 gap-2.5 bg-slate-950/70 p-3 rounded-xl border border-slate-800 min-h-[190px]">
         <!-- 動態物品格子 -->
       </div>
@@ -625,10 +624,7 @@
             cardLevels: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
             inventory: { upgradeStone: 6, grass_stone: 1, fire_stone: 1, water_stone: 1, void_stone: 0 },
             claimedAchievements: [],
-            friends: [
-              { id: "npc_1", name: "艾莉亞", title: "精靈學者", level: 12, giftSent: false },
-              { id: "npc_2", name: "雷恩", title: "狂炎戰士", level: 15, giftSent: false }
-            ]
+            friends: [] // 新帳號預設為 0 位好友，完全由玩家自己新增
           }
         };
         saveAllAccounts(accs);
@@ -643,11 +639,11 @@
       if (!player.unlockedTitles) player.unlockedTitles = ["初心召喚師"];
       if (!player.cardLevels) player.cardLevels = {};
       if (!player.claimedAchievements) player.claimedAchievements = [];
+      // 確保好友列表存在，且移除舊版預設的 NPC
       if (!player.friends) {
-        player.friends = [
-          { id: "npc_1", name: "艾莉亞", title: "精靈學者", level: 12, giftSent: false },
-          { id: "npc_2", name: "雷恩", title: "狂炎戰士", level: 15, giftSent: false }
-        ];
+        player.friends = [];
+      } else {
+        player.friends = player.friends.filter(f => !f.id.startsWith("npc_"));
       }
       if (!player.inventory) {
         player.inventory = { upgradeStone: 5, grass_stone: 1, fire_stone: 1, water_stone: 1, void_stone: 0 };
@@ -683,7 +679,7 @@
       document.getElementById('gold-display').innerText = player.gold;
     }
 
-    /* ================= 6. 個人資料、稱號與好友系統 ================= */
+    /* ================= 6. 個人資料、稱號與好友系統 (支援刪除好友) ================= */
     function openProfileModal() {
       document.getElementById('profile-input-name').value = player.name;
       renderTitlesList();
@@ -706,7 +702,7 @@
       player.unlockedTitles.forEach(t => {
         const isCurrent = (player.title === t);
         const tag = document.createElement('button');
-        tag.className = `px-2 py-1 rounded text-[11px] font-bold transition ${isCurrent ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-300 hover:border-amber-400 border border-slate-700'}`;
+        tag.className = `px-2 py-1 rounded text-[11px] font-bold transition whitespace-nowrap ${isCurrent ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-300 hover:border-amber-400 border border-slate-700'}`;
         tag.innerText = t + (isCurrent ? ' (佩戴中)' : '');
         tag.onclick = () => {
           player.title = t;
@@ -720,7 +716,16 @@
     function renderFriendsList() {
       const listContainer = document.getElementById('friends-list-container');
       listContainer.innerHTML = '';
-      document.getElementById('friends-count').innerText = player.friends.length;
+      document.getElementById('friends-count').innerText = (player.friends || []).length;
+
+      if (!player.friends || player.friends.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-4 text-center text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800">
+            目前暫無好友，快點擊上方「+ 結交新冒險者」尋找旅伴吧！
+          </div>
+        `;
+        return;
+      }
 
       player.friends.forEach((fr, idx) => {
         const row = document.createElement('div');
@@ -735,33 +740,48 @@
               <div class="text-[9px] text-slate-400">Lv.${fr.level} ｜ 在線</div>
             </div>
           </div>
-          <button onclick="sendFriendGift(${idx})" class="px-2 py-1 rounded text-[10px] font-bold ${fr.giftSent ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white'}">
-            ${fr.giftSent ? '已贈禮' : '贈送金幣'}
-          </button>
+          <div class="flex items-center gap-1.5">
+            <button onclick="sendFriendGift(${idx})" class="px-2 py-1 rounded text-[10px] font-bold ${fr.giftSent ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500 text-white'}">
+              ${fr.giftSent ? '已贈禮' : '贈禮'}
+            </button>
+            <button onclick="deleteFriend(${idx})" class="w-6 h-6 rounded flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition" title="刪除好友">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
         `;
         listContainer.appendChild(row);
       });
     }
 
+    function deleteFriend(idx) {
+      const targetName = player.friends[idx].name;
+      if (confirm(`確定要解除與【${targetName}】的好友關係嗎？`)) {
+        player.friends.splice(idx, 1);
+        saveCurrentPlayerData();
+        renderFriendsList();
+      }
+    }
+
     function sendFriendGift(idx) {
       if (player.friends[idx].giftSent) return;
       player.friends[idx].giftSent = true;
-      player.gold += 50; // 禮尚往來獲得回贈
+      player.gold += 50;
       saveCurrentPlayerData();
       renderFriendsList();
       alert(`已贈予好友禮物！好友回贈了 50 金幣！🪙`);
     }
 
     function addRandomFriend() {
-      if (player.friends.length >= 20) {
+      if ((player.friends || []).length >= 20) {
         alert("好友名額已達上限 (20位)！");
         return;
       }
-      const names = ["希爾瓦", "卡蓮", "索爾", "維克多", "琉璃", "米迦勒", "零度"];
-      const titles = ["深淵追獵者", "流浪法師", "風暴旅人", "守護巨盾", "符文術士"];
+      const names = ["希爾瓦", "卡蓮", "索爾", "維克多", "琉璃", "米迦勒", "零度", "艾莉亞", "雷恩"];
+      const titles = ["深淵追獵者", "流浪法師", "風暴旅人", "守護巨盾", "符文術士", "精靈學者", "狂炎戰士"];
       const randName = names[Math.floor(Math.random() * names.length)] + "#" + Math.floor(100 + Math.random() * 900);
       const randTitle = titles[Math.floor(Math.random() * titles.length)];
 
+      if (!player.friends) player.friends = [];
       player.friends.push({
         id: "usr_" + Date.now(),
         name: randName,
@@ -791,7 +811,7 @@
           <div>
             <div class="flex items-center gap-1.5">
               <span class="text-xs font-black ${isDone ? 'text-amber-400' : 'text-slate-300'}">${ach.title}</span>
-              ${ach.rewardTitle ? `<span class="text-[9px] px-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-700">稱號:${ach.rewardTitle}</span>` : ''}
+              ${ach.rewardTitle ? `<span class="text-[9px] px-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-700 whitespace-nowrap">稱號:${ach.rewardTitle}</span>` : ''}
             </div>
             <p class="text-[10px] text-slate-400 mt-0.5">${ach.desc}</p>
             <div class="text-[10px] text-amber-300 font-bold mt-1">獎勵: +${ach.rewardGold} 🪙 ｜ +${ach.rewardStone} 💎</div>
@@ -833,10 +853,8 @@
       const grid = document.getElementById('inventory-grid');
       grid.innerHTML = '';
 
-      // 提取有數量的物品放入格子
       const existingItems = Object.keys(MATERIAL_DB).filter(k => (player.inventory[k] || 0) > 0);
 
-      // 固定產生 12 格 (4x3)
       for (let i = 0; i < 12; i++) {
         const slot = document.createElement('div');
         const itemKey = existingItems[i];
@@ -853,7 +871,6 @@
           `;
           slot.onclick = () => openItemDetail(itemKey);
         } else {
-          // 空格子
           slot.className = "w-full aspect-square rounded-xl bg-slate-900/40 border border-slate-800 flex items-center justify-center text-slate-700 text-xs";
           slot.innerHTML = `<i class="fa-solid fa-plus opacity-20"></i>`;
         }
@@ -1181,7 +1198,7 @@
             <div class="text-xs font-bold text-center truncate text-white">${monster.name}</div>
             <div class="text-[9px] text-slate-400 line-clamp-2 leading-tight">${monster.desc}</div>
             <div class="flex justify-between w-full text-xs font-black pt-1 border-t border-slate-700">
-              <span class="text-rose-400">⚔️${monster.currentAtk}</span>
+              <span class="text-rose-400">⚔️️${monster.currentAtk}</span>
               <span class="text-emerald-400">❤️${monster.currentHp}</span>
             </div>
           `;
@@ -1222,7 +1239,6 @@
       }
     }
 
-    /* 出牌後：立即自動朝敵方發起衝擊打擊！ */
     function playCard(index) {
       if (!battleState.isPlayerTurn || battleState.isAnimating) return;
       const card = battleState.playerHand[index];
@@ -1243,7 +1259,6 @@
       battleState.playerBoard.push(monsterInstance);
       updateBattleUI();
 
-      // 特殊技能觸發
       if (card.id === 5) {
         if (battleState.enemyBoard.length > 0) {
           battleState.enemyBoard[0].currentHp -= 12;
@@ -1264,13 +1279,11 @@
       checkDeadMonsters();
       updateBattleUI();
 
-      // 自動發動衝擊攻擊
       setTimeout(() => {
         autoAttackEnemy(boardIdx);
       }, 200);
     }
 
-    /* 單隻怪獸自動打擊判定 */
     function autoAttackEnemy(attackerIdx) {
       if (attackerIdx >= battleState.playerBoard.length) return;
       const attacker = battleState.playerBoard[attackerIdx];
@@ -1280,12 +1293,10 @@
       if (attackerEl) attackerEl.classList.add('anim-dash-up');
 
       setTimeout(() => {
-        // 優先攻擊敵方嘲諷或第一隻前排小怪
         const tauntIndex = battleState.enemyBoard.findIndex(m => m.id === 9);
         const targetMonsterIdx = tauntIndex !== -1 ? tauntIndex : (battleState.enemyBoard.length > 0 ? 0 : -1);
 
         if (targetMonsterIdx !== -1) {
-          // 攻擊小怪
           const defender = battleState.enemyBoard[targetMonsterIdx];
           const mult = getElementMultiplier(attacker.element, defender.element);
           const isCrit = mult > 1.0;
@@ -1303,7 +1314,6 @@
             battleState.enemyHp += defender.currentHp;
           }
         } else {
-          // 直擊首領
           const dmg = attacker.currentAtk;
           battleState.enemyHp -= dmg;
           const bossEl = document.getElementById('enemy-hero-box');
@@ -1333,7 +1343,6 @@
       return 1.0;
     }
 
-    /* 智慧交替回合檢查：水晶用光或無牌可出時，自動換對手行動 */
     function scheduleAutoTurnCheck() {
       if (!battleState.isPlayerTurn || battleState.isAnimating) return;
       if (checkBattleOver()) return;
