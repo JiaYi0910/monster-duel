@@ -95,9 +95,9 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between" onclick="closeDropdownMenu(event)">
 
-  <!-- ================= 頂部狀態欄（精簡版，帶有等級與經驗值條） ================= -->
+  <!-- ================= 頂部狀態欄（精簡版＋下拉選單） ================= -->
   <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
     <!-- 個人資料入口 (含等級經驗條展示) -->
     <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
@@ -119,25 +119,40 @@
       </div>
     </div>
 
-    <!-- 資源、成就、背包展示 (單行不折行) -->
+    <!-- 資源、下拉選單、登出 (不再擠塞) -->
     <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
       <!-- 金幣 -->
       <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
-      <!-- 成就 -->
-      <button onclick="openAchievementsModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-yellow-500/40 text-yellow-300 transition active:scale-95 whitespace-nowrap shrink-0">
-        <i class="fa-solid fa-trophy text-amber-400 text-xs"></i>
-        <span class="text-[11px]">成就</span>
-      </button>
-      <!-- 背包 -->
-      <button onclick="openInventoryModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-indigo-500/40 text-indigo-300 transition active:scale-95 whitespace-nowrap shrink-0">
-        <i class="fa-solid fa-box-open text-indigo-400 text-xs"></i>
-        <span class="text-[11px]">背包</span>
-      </button>
-      <!-- 登出 -->
-      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-2 py-1 transition shrink-0" title="登出">
+
+      <!-- 功能下拉選單容器 -->
+      <div class="relative">
+        <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
+          <i class="fa-solid fa-bars text-amber-400"></i>
+          <span class="text-[11px] font-bold">選單</span>
+        </button>
+
+        <!-- 下拉選單內容浮層 -->
+        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-36 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1">
+          <button onclick="openFriendsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
+            <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
+            <span>冒險好友</span>
+          </button>
+          <button onclick="openInventoryModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-indigo-300 transition">
+            <i class="fa-solid fa-box-open text-indigo-400 w-4 text-center"></i>
+            <span>冒險背包</span>
+          </button>
+          <button onclick="openAchievementsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-amber-300 transition">
+            <i class="fa-solid fa-trophy text-amber-400 w-4 text-center"></i>
+            <span>成就殿堂</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 登出按鈕 -->
+      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-1.5 py-1 transition shrink-0" title="登出">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
@@ -149,7 +164,6 @@
     <!-- 1. 帳號密碼登入畫面 -->
     <section id="view-login" class="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-4">
       <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 p-8 rounded-2xl shadow-2xl backdrop-blur-md text-center">
-        <!-- 龍圖示 LOGO -->
         <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
           <i class="fa-solid fa-dragon text-3xl text-white"></i>
         </div>
@@ -289,7 +303,6 @@
           <p class="text-xs text-slate-400 mt-1">消耗金幣召喚幻獸，解鎖原始形態與進化素材！</p>
         </div>
 
-        <!-- 旋轉金色符文召喚圈 -->
         <div class="relative w-56 h-56 mx-auto flex items-center justify-center">
           <div class="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/60 anim-magic-circle-rev"></div>
           <div class="absolute inset-3 rounded-full border-4 border-dotted border-yellow-300/80 anim-magic-circle shadow-[0_0_25px_rgba(250,204,21,0.5)]"></div>
@@ -374,7 +387,7 @@
     </button>
   </nav>
 
-  <!-- ================= 彈窗層：個人資料、頭像、稱號與等級經驗詳細 ================= -->
+  <!-- ================= 彈窗層：個人資料（已移除好友系統，純粹清爽） ================= -->
   <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -399,7 +412,6 @@
             <div id="profile-exp-text" class="text-xs font-bold text-slate-200">0 / 100 EXP</div>
           </div>
         </div>
-        <!-- 經驗條 -->
         <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-700">
           <div id="profile-exp-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300" style="width: 0%;"></div>
         </div>
@@ -429,38 +441,48 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-400 mb-1">佩戴專屬稱號</label>
-          <div id="profile-titles-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1 bg-slate-950/50 rounded-lg border border-slate-800">
+          <div id="profile-titles-list" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1 bg-slate-950/50 rounded-lg border border-slate-800">
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- 審核制好友系統 -->
-      <div class="border-t border-slate-800 pt-3 space-y-3">
-        <div>
-          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-1.5">
-            <i class="fa-solid fa-user-plus text-sky-400"></i> 發送好友邀請
-          </span>
-          <div class="flex items-center gap-2">
-            <input type="text" id="friend-input-target-id" placeholder="輸入對方 ID (例: #1234)" class="flex-1 min-w-0 bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-sky-400">
-            <button onclick="sendFriendRequest()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold whitespace-nowrap shrink-0">發送申請</button>
-          </div>
+  <!-- ================= 彈窗層：獨立好友系統（申請、審核、名冊） ================= -->
+  <div id="modal-friends" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <h3 class="text-base font-black text-sky-400 flex items-center gap-2">
+          <i class="fa-solid fa-user-group text-sky-400"></i> 冒險者好友中心
+        </h3>
+        <button onclick="closeFriendsModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- 發送好友申請 -->
+      <div>
+        <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-1.5">
+          <i class="fa-solid fa-user-plus text-sky-400"></i> 發送好友邀請
+        </span>
+        <div class="flex items-center gap-2">
+          <input type="text" id="friend-input-target-id" placeholder="輸入對方 ID (例: #1234)" class="flex-1 min-w-0 bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-sky-400">
+          <button onclick="sendFriendRequest()" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold whitespace-nowrap shrink-0">發送申請</button>
         </div>
+      </div>
 
-        <!-- 待審核申請區 -->
-        <div id="friend-requests-box" class="hidden bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/40 space-y-1.5">
-          <div class="text-[11px] font-bold text-amber-300 flex items-center gap-1">
-            <i class="fa-solid fa-bell animate-pulse"></i> 收到新的好友審核邀請：
-          </div>
-          <div id="friend-requests-list" class="space-y-1"></div>
+      <!-- 待審核申請區 -->
+      <div id="friend-requests-box" class="hidden bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/40 space-y-1.5">
+        <div class="text-[11px] font-bold text-amber-300 flex items-center gap-1">
+          <i class="fa-solid fa-bell animate-pulse"></i> 收到新的好友審核邀請：
         </div>
+        <div id="friend-requests-list" class="space-y-1"></div>
+      </div>
 
-        <!-- 已加入好友名單 -->
-        <div>
-          <div class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-1">
-            <i class="fa-solid fa-user-group text-emerald-400"></i> 好友名冊 (<span id="friends-count">0</span>/20)
-          </div>
-          <div id="friends-list-container" class="space-y-1.5 max-h-36 overflow-y-auto no-scrollbar">
-          </div>
+      <!-- 已加入好友名單 -->
+      <div>
+        <div class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-1">
+          <i class="fa-solid fa-user-group text-emerald-400"></i> 好友名冊 (<span id="friends-count">0</span>/20)
+        </div>
+        <div id="friends-list-container" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
         </div>
       </div>
     </div>
@@ -585,7 +607,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：戰鬥結算彈窗 (顯示獲得經驗) ================= -->
+  <!-- ================= 彈窗層：戰鬥結算彈窗 ================= -->
   <div id="modal-battle-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="battle-result-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-trophy"></i></div>
@@ -645,7 +667,32 @@
 
   <!-- ================= JavaScript 核心引擎 ================= -->
   <script>
-    /* ================= 1. 幻獸資料庫 ================= */
+    /* ================= 1. 下拉選單控制 ================= */
+    function toggleDropdownMenu(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('dropdown-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function closeDropdownMenu(e) {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
+    }
+
+    function openFriendsModal() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu) menu.classList.add('hidden');
+      renderFriendRequests();
+      renderFriendsList();
+      document.getElementById('modal-friends').classList.remove('hidden');
+    }
+    function closeFriendsModal() {
+      document.getElementById('modal-friends').classList.add('hidden');
+    }
+
+    /* ================= 2. 幻獸資料庫 ================= */
     const MONSTER_DB = [
       { id: 1, name: "青芽草泥球", rarity: "N", element: "grass", cost: 1, baseAtk: 14, baseHp: 28, desc: "未受傷時自我修復 8 點生命", faIcon: "fa-seedling", evolvableTo: 101 },
       { id: 2, name: "赤耳火狐", rarity: "N", element: "fire", cost: 1, baseAtk: 18, baseHp: 18, desc: "【突襲】登場可立即發動攻擊", faIcon: "fa-fire", evolvableTo: 102 },
@@ -672,7 +719,7 @@
       { id: 111, name: "創世極晝天鹿", rarity: "SSR", element: "light", cost: 7, baseAtk: 58, baseHp: 105, desc: "【聖光普照】每回合開始全隊恢復 25 點生命", faIcon: "fa-star-of-david", evolvableTo: null }
     ];
 
-    /* ================= 2. 戰役章節資料庫 (含通關經驗值) ================= */
+    /* ================= 3. 戰役章節資料庫 ================= */
     const STAGES_DB = [
       { id: 1, title: "第 1 區：微光森林外圍", desc: "草水小怪出沒，掉落蒼翠靈石與強化石。", bossName: "森林巨蜂王", bossElement: "grass", bossHp: 70, bossIcon: "fa-bug", rewardGold: 220, rewardExp: 60, dropStone: 3, dropMaterial: "grass_stone", deck: [1, 3, 4] },
       { id: 2, title: "第 2 區：灼熱焦土裂谷", desc: "烈焰怪獸攻勢兇猛，掉落烈焰結晶！", bossName: "熔岩魔石像", bossElement: "fire", bossHp: 110, bossIcon: "fa-mountain", rewardGold: 380, rewardExp: 90, dropStone: 4, dropMaterial: "fire_stone", deck: [2, 5, 8] },
@@ -680,7 +727,7 @@
       { id: 4, title: "第 4 區：星辰遠古祭壇", desc: "虛空裂隙打開之地，掉落頂級虛空星核！", bossName: "混沌終焉核心", bossElement: "void", bossHp: 200, bossIcon: "fa-eye", rewardGold: 1100, rewardExp: 220, dropStone: 8, dropMaterial: "void_stone", deck: [7, 8, 9, 10, 11] }
     ];
 
-    /* ================= 3. 成就資料庫 ================= */
+    /* ================= 4. 成就資料庫 ================= */
     const ACHIEVEMENTS_DB = [
       { id: "stage_1", title: "微光破曉", desc: "成功通關第 1 區「微光森林外圍」", rewardGold: 300, rewardStone: 5, rewardTitle: null, check: p => p.clearedStages >= 1 },
       { id: "stage_4", title: "星界救世主", desc: "擊破終章第 4 區「星辰遠古祭壇」", rewardGold: 2000, rewardStone: 20, rewardTitle: "星穹弒神者", check: p => p.clearedStages >= 4 },
@@ -691,7 +738,7 @@
       { id: "friend_3", title: "四海皆兄弟", desc: "成功結交 3 位以上的冒險者好友", rewardGold: 400, rewardStone: 5, rewardTitle: null, check: p => (p.friends || []).length >= 3 }
     ];
 
-    /* ================= 4. 背包道具資料庫 ================= */
+    /* ================= 5. 背包道具資料庫 ================= */
     const MATERIAL_DB = {
       upgradeStone: { name: "幻獸強化石", icon: "fa-gem", rarity: "R", desc: "蘊含濃郁靈力的打磨晶石，可用於提升幻獸等級與戰鬥數值。" },
       grass_stone: { name: "蒼翠靈石", icon: "fa-leaf", rarity: "SR", desc: "森林深處吸納百年月光的翡翠精魄，草系滿等怪獸進化專用素材。" },
@@ -700,19 +747,17 @@
       void_stone: { name: "虛空星核", icon: "fa-circle-dot", rarity: "SSR", desc: "天外隕落的微型黑洞殘核，具備扭曲現實的神秘威能。" }
     };
 
-    /* ================= 5. 玩家資料管理、等級與體力恢復 ================= */
+    /* ================= 6. 玩家資料管理、等級與體力恢復 ================= */
     let currentAccount = null;
     let player = null;
     let selectedUpgradeCardId = null;
     let isShowingCompletedAchievements = false;
     let staminaInterval = null;
 
-    // 計算升級所需經驗值公式：等級 * 100
     function getMaxExpForLevel(lvl) {
       return lvl * 100;
     }
 
-    // 增加召喚師經驗值並處理連續升級
     function addPlayerExp(amount) {
       if (!player) return;
       player.exp = (player.exp || 0) + amount;
@@ -722,7 +767,6 @@
         player.exp -= getMaxExpForLevel(player.level);
         player.level += 1;
         leveledUp = true;
-        // 升級福利：補滿體力並贈送獎勵
         player.stamina = 5;
         player.gold += 200;
         player.inventory.upgradeStone = (player.inventory.upgradeStone || 0) + 3;
@@ -885,13 +929,11 @@
       document.getElementById('user-level').innerText = player.level;
       document.getElementById('gold-display').innerText = player.gold;
       
-      // 更新頂部等級經驗條
       const maxExp = getMaxExpForLevel(player.level);
       const expPercent = Math.min(100, Math.max(0, ((player.exp || 0) / maxExp) * 100));
       const expBar = document.getElementById('user-exp-bar');
       if (expBar) expBar.style.width = expPercent + '%';
 
-      // 體力更新
       const stamDisplay = document.getElementById('stamina-display');
       if (stamDisplay) stamDisplay.innerText = `${player.stamina}/5`;
 
@@ -909,12 +951,11 @@
       }
     }
 
-    /* ================= 6. 個人資料、稱號與真實審核制好友系統 ================= */
+    /* ================= 7. 個人資料與稱號管理 ================= */
     function openProfileModal() {
       document.getElementById('profile-my-id').innerText = player.id || "#8888";
       document.getElementById('profile-input-name').value = player.name;
       
-      // 個人資料等級卡更新
       document.getElementById('profile-level-val').innerText = player.level;
       document.getElementById('profile-title-val').innerText = player.title || "初心召喚師";
       const maxExp = getMaxExpForLevel(player.level);
@@ -923,8 +964,6 @@
       document.getElementById('profile-exp-bar').style.width = expPct + '%';
 
       renderTitlesList();
-      renderFriendRequests();
-      renderFriendsList();
       document.getElementById('modal-profile').classList.remove('hidden');
     }
     function closeProfileModal() { document.getElementById('modal-profile').classList.add('hidden'); }
@@ -961,6 +1000,7 @@
       });
     }
 
+    /* ================= 8. 好友系統專屬邏輯 ================= */
     function sendFriendRequest() {
       const targetId = document.getElementById('friend-input-target-id').value.trim();
       if (!targetId) {
@@ -1100,8 +1140,10 @@
       alert(`已贈予好友禮物！好友回贈 50 金幣！`);
     }
 
-    /* ================= 7. 成就系統 ================= */
+    /* ================= 9. 成就系統 ================= */
     function openAchievementsModal() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu) menu.classList.add('hidden');
       switchAchievementTab(false);
       document.getElementById('modal-achievements').classList.remove('hidden');
     }
@@ -1179,8 +1221,11 @@
       switchAchievementTab(isShowingCompletedAchievements);
     }
 
-    /* ================= 8. 格子背包 (Item Grid) ================= */
+    /* ================= 10. 格子背包 (Item Grid) ================= */
     function openInventoryModal() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu) menu.classList.add('hidden');
+
       const grid = document.getElementById('inventory-grid');
       grid.innerHTML = '';
 
@@ -1223,7 +1268,7 @@
     }
     function closeItemDetailModal() { document.getElementById('modal-item-detail').classList.add('hidden'); }
 
-    /* ================= 9. 卡牌數值與升級進化 ================= */
+    /* ================= 11. 卡牌數值與升級進化 ================= */
     function getMonsterStats(id) {
       const monster = MONSTER_DB.find(m => m.id === id);
       const level = (player && player.cardLevels && player.cardLevels[id]) || 1;
@@ -1324,7 +1369,7 @@
       closeUpgradeModal();
     }
 
-    /* ================= 10. 戰鬥核心引擎 ================= */
+    /* ================= 12. 戰鬥核心引擎 ================= */
     let battleState = {
       activeStage: null,
       turn: 1,
@@ -1865,7 +1910,6 @@
           player.clearedStages = battleState.activeStage.id;
         }
 
-        // 結算並增加召喚師經驗值
         addPlayerExp(expEarned);
       } else {
         icon.innerHTML = `<i class="fa-solid fa-skull text-rose-500"></i>`;
@@ -1893,7 +1937,7 @@
       switchTab('stages');
     }
 
-    /* ================= 11. 牌組配置與圖鑑 ================= */
+    /* ================= 13. 牌組配置與圖鑑 ================= */
     function renderDeckView() {
       player.deck = [...new Set(player.deck)];
       document.getElementById('deck-count').innerText = player.deck.length;
@@ -1964,7 +2008,7 @@
       renderDeckView();
     }
 
-    /* ================= 12. 召喚祭壇與圖鑑 ================= */
+    /* ================= 14. 召喚祭壇與圖鑑 ================= */
     function drawGacha(times) {
       const cost = times === 1 ? 100 : 900;
       if (player.gold < cost) { alert("金幣不足！"); return; }
