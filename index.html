@@ -97,9 +97,9 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between" onclick="closeDropdownMenu(event)">
 
-  <!-- ================= 頂部狀態欄（精簡版＋下拉選單） ================= -->
+  <!-- ================= 頂部狀態欄 ================= -->
   <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
-    <!-- 個人資料入口 (含等級經驗條展示) -->
+    <!-- 個人資料入口 -->
     <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
       <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         <i class="fa-solid fa-user-astronaut"></i>
@@ -119,23 +119,22 @@
       </div>
     </div>
 
-    <!-- 資源、下拉選單、登出 (不再擠塞) -->
+    <!-- 資源、功能下拉選單、登出 -->
     <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
       <!-- 金幣 -->
-      <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
+      <div class="flex items-center gap-1 bg-slate-800/90 px-2.5 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
 
-      <!-- 功能下拉選單容器 -->
+      <!-- 功能下拉選單 (含背包、成就、好友、玩法說明) -->
       <div class="relative">
         <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
           <i class="fa-solid fa-bars text-amber-400"></i>
           <span class="text-[11px] font-bold">選單</span>
         </button>
 
-        <!-- 下拉選單內容浮層 -->
-        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-36 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1">
+        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-40 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1">
           <button onclick="openFriendsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
             <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
             <span>冒險好友</span>
@@ -148,10 +147,14 @@
             <i class="fa-solid fa-trophy text-amber-400 w-4 text-center"></i>
             <span>成就殿堂</span>
           </button>
+          <button onclick="openGuideModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-emerald-300 transition">
+            <i class="fa-solid fa-circle-question text-emerald-400 w-4 text-center"></i>
+            <span>遊戲說明</span>
+          </button>
         </div>
       </div>
 
-      <!-- 登出按鈕 -->
+      <!-- 登出 -->
       <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-1.5 py-1 transition shrink-0" title="登出">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
@@ -193,7 +196,65 @@
       </div>
     </section>
 
-    <!-- 2. 冒險關卡章節視圖 (體力移至標題右側) -->
+    <!-- 2. 主城大廳視圖 (登入後的首頁) -->
+    <section id="view-home" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar">
+      <div class="max-w-4xl mx-auto space-y-6 pb-12">
+        <!-- 召喚師主城資訊橫幅 -->
+        <div class="relative bg-gradient-to-r from-indigo-950 via-slate-900 to-amber-950/40 p-5 rounded-3xl border border-slate-700 shadow-2xl overflow-hidden">
+          <div class="flex items-center justify-between relative z-10">
+            <div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold uppercase tracking-wider">冒險者主城</span>
+              <h2 class="text-2xl font-black text-white mt-1">歡迎歸來，<span id="home-user-name" class="text-amber-300">冒險者</span></h2>
+              <p class="text-xs text-slate-400 mt-0.5">大陸的幻獸正等待著你的號令，啟程出征吧！</p>
+            </div>
+            <!-- 快速出征按鈕 -->
+            <button onclick="switchTab('stages')" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 whitespace-nowrap">
+              <i class="fa-solid fa-compass"></i>
+              <span>前往出征</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 主力王牌幻獸看板 -->
+        <div class="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl space-y-3">
+          <div class="flex justify-between items-center border-b border-slate-800/80 pb-2">
+            <span class="text-xs font-black text-slate-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-crown text-amber-400"></i> 出征王牌幻獸
+            </span>
+            <button onclick="switchTab('deck')" class="text-xs text-sky-400 hover:underline">調整陣容 <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+          </div>
+          <div id="home-featured-card" class="flex items-center gap-4 p-3 bg-slate-950/60 rounded-2xl border border-indigo-500/30">
+            <!-- 動態展示第一張出征怪獸 -->
+          </div>
+        </div>
+
+        <!-- 功能快捷九宮格 -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div onclick="switchTab('stages')" class="p-4 bg-slate-900/90 hover:border-amber-400 border border-slate-800 rounded-2xl cursor-pointer transition text-center space-y-2 group">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-xl group-hover:scale-110 transition"><i class="fa-solid fa-map"></i></div>
+            <div class="text-xs font-bold text-white">戰役章節</div>
+            <div class="text-[10px] text-slate-400">征服各地首領</div>
+          </div>
+          <div onclick="switchTab('gacha')" class="p-4 bg-slate-900/90 hover:border-amber-400 border border-slate-800 rounded-2xl cursor-pointer transition text-center space-y-2 group">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-xl group-hover:scale-110 transition"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <div class="text-xs font-bold text-white">遠古召喚</div>
+            <div class="text-[10px] text-slate-400">招募傳奇神獸</div>
+          </div>
+          <div onclick="switchTab('deck')" class="p-4 bg-slate-900/90 hover:border-amber-400 border border-slate-800 rounded-2xl cursor-pointer transition text-center space-y-2 group">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 text-xl group-hover:scale-110 transition"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="text-xs font-bold text-white">陣容養成</div>
+            <div class="text-[10px] text-slate-400">強化與滿等進化</div>
+          </div>
+          <div onclick="openGuideModal()" class="p-4 bg-slate-900/90 hover:border-emerald-400 border border-slate-800 rounded-2xl cursor-pointer transition text-center space-y-2 group">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition"><i class="fa-solid fa-book-open-reader"></i></div>
+            <div class="text-xs font-bold text-white">玩法教學</div>
+            <div class="text-[10px] text-slate-400">新手速成指引</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 冒險關卡章節視圖 -->
     <section id="view-stages" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between border-b border-slate-800 pb-4 gap-2">
@@ -216,7 +277,7 @@
       </div>
     </section>
 
-    <!-- 3. 對戰場視圖 -->
+    <!-- 4. 對戰場視圖 -->
     <section id="view-battle" class="hidden h-full w-full flex flex-col justify-between bg-slate-950 relative overflow-hidden select-none">
       <!-- 敵方半場 -->
       <div class="h-[43%] bg-slate-900/40 border-b border-slate-800/80 p-3 flex flex-col justify-between relative">
@@ -295,7 +356,7 @@
       </div>
     </section>
 
-    <!-- 4. 召喚祭壇 -->
+    <!-- 5. 召喚祭壇 -->
     <section id="view-gacha" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-3xl mx-auto text-center space-y-6 pt-4">
         <div>
@@ -303,6 +364,7 @@
           <p class="text-xs text-slate-400 mt-1">消耗金幣召喚幻獸，解鎖原始形態與進化素材！</p>
         </div>
 
+        <!-- 旋轉金色符文召喚圈 -->
         <div class="relative w-56 h-56 mx-auto flex items-center justify-center">
           <div class="absolute inset-0 rounded-full border-2 border-dashed border-amber-400/60 anim-magic-circle-rev"></div>
           <div class="absolute inset-3 rounded-full border-4 border-dotted border-yellow-300/80 anim-magic-circle shadow-[0_0_25px_rgba(250,204,21,0.5)]"></div>
@@ -329,7 +391,7 @@
       </div>
     </section>
 
-    <!-- 5. 幻獸圖鑑視圖 -->
+    <!-- 6. 幻獸圖鑑視圖 -->
     <section id="view-codex" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6 pb-12">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -346,7 +408,7 @@
       </div>
     </section>
 
-    <!-- 6. 牌組配置視圖 -->
+    <!-- 7. 牌組配置視圖 -->
     <section id="view-deck" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-4 pb-12">
         <div class="flex justify-between items-center border-b border-slate-800 pb-3 gap-2">
@@ -371,9 +433,12 @@
 
   </main>
 
-  <!-- ================= 底部導覽列 ================= -->
+  <!-- ================= 底部導覽列（加入主城大廳入口） ================= -->
   <nav id="bottom-nav" class="hidden safe-bottom-nav bg-slate-900/95 border-t border-slate-800 flex justify-around items-center px-2 z-30 shadow-2xl shrink-0">
-    <button onclick="switchTab('stages')" class="nav-tab-btn flex flex-col items-center gap-1 text-amber-400 font-bold text-xs" data-target="stages">
+    <button onclick="switchTab('home')" class="nav-tab-btn flex flex-col items-center gap-1 text-amber-400 font-bold text-xs" data-target="home">
+      <i class="fa-solid fa-dungeon text-lg"></i> 主城大廳
+    </button>
+    <button onclick="switchTab('stages')" class="nav-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-amber-300 font-bold text-xs" data-target="stages">
       <i class="fa-solid fa-map text-lg"></i> 冒險關卡
     </button>
     <button onclick="switchTab('gacha')" class="nav-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-amber-300 font-bold text-xs" data-target="gacha">
@@ -387,7 +452,7 @@
     </button>
   </nav>
 
-  <!-- ================= 彈窗層：個人資料（已移除好友系統，純粹清爽） ================= -->
+  <!-- ================= 彈窗層：個人資料檔案 ================= -->
   <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -448,7 +513,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：獨立好友系統（申請、審核、名冊） ================= -->
+  <!-- ================= 彈窗層：獨立好友系統 ================= -->
   <div id="modal-friends" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -621,7 +686,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：召喚師等級提升特效彈窗 (LEVEL UP!) ================= -->
+  <!-- ================= 彈窗層：召喚師等級提升特效彈窗 ================= -->
   <div id="modal-level-up" class="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 hidden">
     <div class="max-w-xs w-full bg-gradient-to-b from-amber-950/80 via-slate-900 to-slate-950 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-4 shadow-[0_0_50px_rgba(250,204,21,0.5)] animate-bounce">
       <div class="text-6xl text-amber-400"><i class="fa-solid fa-shield-halved"></i></div>
@@ -636,6 +701,44 @@
       </div>
       <button onclick="closeLevelUpModal()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm rounded-xl transition shadow-lg">
         領取晉升榮耀
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗層：遊戲玩法說明與新手教學 ================= -->
+  <div id="modal-guide" class="fixed inset-0 bg-black/85 z-[65] flex items-center justify-center p-4 hidden">
+    <div class="max-w-md w-full bg-slate-900 border-2 border-emerald-500/80 p-6 rounded-3xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <h3 class="text-base font-black text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-circle-question"></i> 幻獸啟示錄：玩法指南
+        </h3>
+        <button onclick="closeGuideModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1">
+          <h4 class="font-black text-amber-300 flex items-center gap-1.5"><i class="fa-solid fa-bolt text-sky-400"></i> 1. 戰鬥出牌與自動突襲</h4>
+          <p>每回合獲得魔力水晶。點擊手牌即可打出至戰場，怪獸進場後會<strong>立刻朝敵方發起突襲衝鋒</strong>！若無牌可出，系統將自動交替至敵方回合。</p>
+        </div>
+
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1">
+          <h4 class="font-black text-amber-300 flex items-center gap-1.5"><i class="fa-solid fa-arrows-spin text-emerald-400"></i> 2. 屬性相剋機制</h4>
+          <p><strong>烈焰 (火) 剋 蒼翠 (草) 剋 深海 (水) 剋 烈焰 (火)</strong>。<br>屬性剋制時造成 <strong>1.35倍 暴擊傷害</strong>！虛空與光輝具備獨立神聖威能。</p>
+        </div>
+
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1">
+          <h4 class="font-black text-amber-300 flex items-center gap-1.5"><i class="fa-solid fa-star text-amber-400"></i> 3. 升級與滿等進化</h4>
+          <p>怪獸可消耗金幣與強化石升級至 <strong>Lv.5 滿等</strong>！滿等後消耗戰役掉落的專屬靈石即可<strong>覺醒為究極神話形態</strong>，解鎖全新型態圖鑑！</p>
+        </div>
+
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1">
+          <h4 class="font-black text-amber-300 flex items-center gap-1.5"><i class="fa-solid fa-heart text-rose-400"></i> 4. 體力與社交好友</h4>
+          <p>出征戰役消耗 1 點體力（每 5 分鐘恢復 1 點）。透過選單分享 ID 給好友，可進行審核互動並每日互贈金幣！</p>
+        </div>
+      </div>
+
+      <button onclick="closeGuideModal()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-slate-950 font-black text-xs rounded-xl shadow-lg transition">
+        我瞭解了，開始冒險！
       </button>
     </div>
   </div>
@@ -667,7 +770,7 @@
 
   <!-- ================= JavaScript 核心引擎 ================= -->
   <script>
-    /* ================= 1. 下拉選單控制 ================= */
+    /* ================= 1. 下拉選單與引導彈窗控制 ================= */
     function toggleDropdownMenu(e) {
       e.stopPropagation();
       const menu = document.getElementById('dropdown-menu');
@@ -690,6 +793,15 @@
     }
     function closeFriendsModal() {
       document.getElementById('modal-friends').classList.add('hidden');
+    }
+
+    function openGuideModal() {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu) menu.classList.add('hidden');
+      document.getElementById('modal-guide').classList.remove('hidden');
+    }
+    function closeGuideModal() {
+      document.getElementById('modal-guide').classList.add('hidden');
     }
 
     /* ================= 2. 幻獸資料庫 ================= */
@@ -801,6 +913,7 @@
         saveAllAccounts(accs);
       }
       updateTopBar();
+      renderHomeFeaturedCard();
     }
 
     function handleAuth(isLoginMode) {
@@ -820,7 +933,7 @@
         currentAccount = user;
         player = accs[user].playerData;
         ensurePlayerSchema();
-        enterGameWorld();
+        enterGameWorld(false);
       } else {
         if (accs[user]) {
           alert("此帳號名稱已被註冊！");
@@ -852,7 +965,7 @@
         saveAllAccounts(accs);
         currentAccount = user;
         player = accs[user].playerData;
-        enterGameWorld();
+        enterGameWorld(true); // 初次遊玩觸發新手教學
       }
     }
 
@@ -903,13 +1016,18 @@
       }, 1000);
     }
 
-    function enterGameWorld() {
+    function enterGameWorld(isFirstTimeUser = false) {
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('top-bar').classList.remove('hidden');
       document.getElementById('bottom-nav').classList.remove('hidden');
       updateTopBar();
       startStaminaTimer();
-      switchTab('stages');
+      renderHomeFeaturedCard();
+      switchTab('home'); // 登入後進入主城大廳
+
+      if (isFirstTimeUser) {
+        setTimeout(openGuideModal, 600);
+      }
     }
 
     function handleLogout() {
@@ -929,6 +1047,9 @@
       document.getElementById('user-level').innerText = player.level;
       document.getElementById('gold-display').innerText = player.gold;
       
+      const homeName = document.getElementById('home-user-name');
+      if (homeName) homeName.innerText = player.name;
+
       const maxExp = getMaxExpForLevel(player.level);
       const expPercent = Math.min(100, Math.max(0, ((player.exp || 0) / maxExp) * 100));
       const expBar = document.getElementById('user-exp-bar');
@@ -949,6 +1070,32 @@
           timerEl.classList.add('hidden');
         }
       }
+    }
+
+    /* 渲染主城大廳王牌幻獸看板 */
+    function renderHomeFeaturedCard() {
+      const container = document.getElementById('home-featured-card');
+      if (!container || !player) return;
+
+      const aceId = player.deck[0] || 1;
+      const monster = getMonsterStats(aceId);
+
+      container.innerHTML = `
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-900 to-purple-950 border-2 border-amber-400 flex items-center justify-center text-3xl text-amber-300 shadow-md">
+          <i class="fa-solid ${monster.faIcon}"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <h3 class="font-black text-sm text-white truncate">${monster.name}</h3>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">${monster.rarity}</span>
+          </div>
+          <div class="text-[10px] text-amber-300 font-bold mt-0.5">Lv.${monster.level} ｜ 屬性: ${monster.element.toUpperCase()}</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex gap-3">
+            <span><i class="fa-solid fa-burst text-rose-400 mr-1"></i>攻擊力: ${monster.atk}</span>
+            <span><i class="fa-solid fa-heart text-emerald-400 mr-1"></i>生命值: ${monster.hp}</span>
+          </div>
+        </div>
+      `;
     }
 
     /* ================= 7. 個人資料與稱號管理 ================= */
@@ -1407,6 +1554,7 @@
       const target = document.getElementById(`view-${tabId}`);
       if (target) target.classList.remove('hidden');
 
+      if (tabId === 'home') renderHomeFeaturedCard();
       if (tabId === 'stages') renderStages();
       if (tabId === 'codex') renderCodex();
       if (tabId === 'deck') renderDeckView();
