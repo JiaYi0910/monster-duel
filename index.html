@@ -127,20 +127,17 @@
 
     <!-- 資源、下拉選單、登出 -->
     <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
-      <!-- 金幣 -->
       <div class="flex items-center gap-1 bg-slate-800/90 px-2.5 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
 
-      <!-- 功能下拉選單容器 -->
       <div class="relative">
         <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
           <i class="fa-solid fa-bars text-amber-400"></i>
           <span class="text-[11px] font-bold">選單</span>
         </button>
 
-        <!-- 下拉選單浮動層 -->
         <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-36 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1">
           <button onclick="openFriendsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
             <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
@@ -161,7 +158,6 @@
         </div>
       </div>
 
-      <!-- 登出按鈕 -->
       <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-1.5 py-1 transition shrink-0" title="登出">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
@@ -203,16 +199,14 @@
       </div>
     </section>
 
-    <!-- 1. 遊戲核心大廳主頁面（主畫面，不再一進來就是關卡） -->
+    <!-- 1. 遊戲核心大廳主頁面 -->
     <section id="view-home" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar flex flex-col justify-between">
       <div class="max-w-md mx-auto w-full space-y-4 text-center my-auto py-2">
-        <!-- 歡迎標語與體力膠囊 -->
         <div class="flex items-center justify-between bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
           <div class="text-left">
             <span class="text-[10px] text-amber-400 tracking-wider font-bold">WELCOME BACK</span>
             <h2 class="text-sm font-black text-white" id="home-welcome-name">冒險者</h2>
           </div>
-          <!-- 體力展示膠囊 -->
           <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-rose-500/40 shadow-lg whitespace-nowrap">
             <i class="fa-solid fa-heart text-rose-500 text-sm animate-pulse"></i>
             <span id="home-stamina-display" class="text-rose-200 text-xs font-bold">5/5</span>
@@ -220,7 +214,6 @@
           </div>
         </div>
 
-        <!-- 主城首席守護獸展示牌 -->
         <div class="relative py-4">
           <div class="w-48 h-48 mx-auto rounded-full bg-gradient-to-br from-indigo-950/60 to-purple-950/80 border-2 border-indigo-500/30 flex items-center justify-center relative shadow-[0_0_40px_rgba(99,102,241,0.25)]">
             <div id="home-pet-icon" class="text-7xl text-amber-300 anim-float-pet">
@@ -232,7 +225,6 @@
           </div>
         </div>
 
-        <!-- 陣容即時戰力面板 -->
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
             <span class="text-[10px] text-slate-400 block">出征幻獸</span>
@@ -244,7 +236,6 @@
           </div>
         </div>
 
-        <!-- 快捷出征巨大按鈕 -->
         <div class="pt-2">
           <button onclick="switchTab('stages')" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-black text-base tracking-wider shadow-[0_0_25px_rgba(234,179,8,0.4)] active:scale-95 transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-khanda text-lg"></i>
@@ -254,7 +245,7 @@
       </div>
     </section>
 
-    <!-- 2. 冒險關卡章節視圖 -->
+    <!-- 2. 冒險關卡章節視圖 (8大戰役章節) -->
     <section id="view-stages" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between border-b border-slate-800 pb-4 gap-2">
@@ -262,9 +253,8 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot"></i> 戰役章節
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5">每次挑戰消耗 1 點體力。通關獲取經驗升級，解鎖更強戰力！</p>
+            <p class="text-xs text-slate-400 mt-0.5">每次挑戰消耗 1 點體力。高等級將解鎖大量生命值！</p>
           </div>
-          <!-- 關卡頁體力膠囊 -->
           <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-2xl border border-rose-500/40 shadow-lg whitespace-nowrap shrink-0">
             <i class="fa-solid fa-heart text-rose-500 text-sm animate-pulse"></i>
             <span id="stamina-display" class="text-rose-200 text-xs font-bold">5/5</span>
@@ -277,7 +267,7 @@
       </div>
     </section>
 
-    <!-- 3. 對戰場視圖 -->
+    <!-- 3. 對戰場視圖 (血量隨等級大幅增長) -->
     <section id="view-battle" class="hidden h-full w-full flex flex-col justify-between bg-slate-950 relative overflow-hidden select-none">
       <!-- 敵方半場 -->
       <div class="h-[43%] bg-slate-900/40 border-b border-slate-800/80 p-3 flex flex-col justify-between relative">
@@ -349,7 +339,6 @@
           </div>
         </div>
 
-        <!-- 手牌區 -->
         <div class="h-28 flex items-center justify-center gap-2 overflow-x-auto no-scrollbar pt-1" id="player-hand">
         </div>
       </div>
@@ -389,7 +378,7 @@
       </div>
     </section>
 
-    <!-- 5. 幻獸圖鑑視圖 -->
+    <!-- 5. 幻獸圖鑑視圖 (全 34 隻圖鑑展示) -->
     <section id="view-codex" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6 pb-12">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -397,7 +386,7 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-book-atlas"></i> 幻獸圖鑑百科
             </h2>
-            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/22</span>（含全體究極神話形態）</p>
+            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/34</span>（含全體究極神話形態）</p>
           </div>
         </div>
 
@@ -431,7 +420,7 @@
 
   </main>
 
-  <!-- ================= 底部導覽列（含大廳主畫面） ================= -->
+  <!-- ================= 底部導覽列 ================= -->
   <nav id="bottom-nav" class="hidden safe-bottom-nav bg-slate-900/95 border-t border-slate-800 flex justify-around items-center px-1 z-30 shadow-2xl shrink-0">
     <button onclick="switchTab('home')" class="nav-tab-btn flex flex-col items-center gap-1 text-amber-400 font-bold text-[11px]" data-target="home">
       <i class="fa-solid fa-chess-rook text-base"></i> 大廳
@@ -460,7 +449,6 @@
         <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- 等級卡 -->
       <div class="bg-gradient-to-r from-indigo-950 to-slate-900 p-3.5 rounded-xl border border-indigo-500/40 space-y-2">
         <div class="flex justify-between items-center">
           <div>
@@ -471,20 +459,19 @@
             </div>
           </div>
           <div class="text-right">
-            <span class="text-[10px] text-slate-400">升級經驗</span>
-            <div id="profile-exp-text" class="text-xs font-bold text-slate-200">0 / 100 EXP</div>
+            <span class="text-[10px] text-slate-400">最大生命值</span>
+            <div id="profile-hp-val" class="text-xs font-black text-emerald-400">80 HP</div>
           </div>
         </div>
         <div class="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-700">
           <div id="profile-exp-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-300" style="width: 0%;"></div>
         </div>
         <div class="text-[10px] text-slate-400 flex justify-between pt-0.5">
-          <span><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>通關戰役可獲取大量經驗值</span>
-          <span class="text-emerald-400">升級恢復滿體力</span>
+          <span id="profile-exp-text">0 / 100 EXP</span>
+          <span class="text-emerald-400">每升1級生命值上限 +20</span>
         </div>
       </div>
 
-      <!-- ID 與修改名號 -->
       <div class="space-y-3">
         <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700 flex items-center justify-between">
           <div class="text-xs">
@@ -575,8 +562,8 @@
         </div>
 
         <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1">
-          <h4 class="font-bold text-rose-300 flex items-center gap-1.5"><i class="fa-solid fa-heart"></i> 體力恢復機制</h4>
-          <p>每次戰役出征消耗 1 點體力。體力每 5 分鐘自動自然恢復 1 點，召喚師等級提升時體力直接回滿！</p>
+          <h4 class="font-bold text-rose-300 flex items-center gap-1.5"><i class="fa-solid fa-heart"></i> 體力與等級血量機制</h4>
+          <p>每次戰役出征消耗 1 點體力。召喚師等級提升時體力直接回滿，且<b>每提升 1 級最大生命值上限額外增加 20 點</b>！</p>
         </div>
       </div>
     </div>
@@ -682,7 +669,6 @@
         </div>
       </div>
 
-      <!-- 未滿等強化按鈕 -->
       <div id="upgrade-action-box" class="space-y-2">
         <div class="text-[11px] text-slate-400">
           升級消耗：<span class="text-amber-300 font-bold" id="upgrade-cost-gold">100 金幣</span> ＋ 
@@ -693,7 +679,6 @@
         </button>
       </div>
 
-      <!-- 滿等覺醒極限進化按鈕 -->
       <div id="evolve-action-box" class="space-y-2 hidden pt-2 border-t border-slate-800">
         <div class="text-[11px] text-amber-300 font-bold">
           <i class="fa-solid fa-star text-amber-400"></i> 恭喜滿等！可消耗材料覺醒為究極神話形態！
@@ -746,6 +731,7 @@
         <p class="text-xs text-amber-200 mt-1 font-bold">召喚師等級提升至 <span id="levelup-new-lvl" class="text-lg text-white">2</span> 級！</p>
       </div>
       <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-xs text-left text-slate-300 space-y-1">
+        <div class="text-emerald-400 font-bold"><i class="fa-solid fa-heart mr-1"></i>主角生命值上限 +20 HP！</div>
         <div class="text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>體力恢復至上限 (5/5)</div>
         <div class="text-amber-300 font-bold"><i class="fa-solid fa-coins mr-1"></i>獲得晉升金幣 +200</div>
         <div class="text-sky-400 font-bold"><i class="fa-solid fa-gem mr-1"></i>獲得幻獸強化石 +3</div>
@@ -817,8 +803,9 @@
       document.getElementById('modal-guide').classList.add('hidden');
     }
 
-    /* ================= 2. 幻獸資料庫 ================= */
+    /* ================= 2. 幻獸資料庫 (擴充至 34 隻全圖鑑) ================= */
     const MONSTER_DB = [
+      // 初階怪獸 (No.001 ~ No.017)
       { id: 1, name: "青芽草泥球", rarity: "N", element: "grass", cost: 1, baseAtk: 14, baseHp: 28, desc: "未受傷時自我修復 8 點生命", faIcon: "fa-seedling", evolvableTo: 101 },
       { id: 2, name: "赤耳火狐", rarity: "N", element: "fire", cost: 1, baseAtk: 18, baseHp: 18, desc: "【突襲】登場可立即發動攻擊", faIcon: "fa-fire", evolvableTo: 102 },
       { id: 3, name: "藍泡小靈龜", rarity: "N", element: "water", cost: 1, baseAtk: 12, baseHp: 36, desc: "【硬殼】首次受傷降低 10 點", faIcon: "fa-shield-heart", evolvableTo: 103 },
@@ -830,7 +817,16 @@
       { id: 9, name: "深淵幻潮鯨", rarity: "SR", element: "water", cost: 4, baseAtk: 26, baseHp: 68, desc: "【嘲諷】敵方必須優先鎖定攻擊牠", faIcon: "fa-water", evolvableTo: 109 },
       { id: 10, name: "星穹噬光獸", rarity: "SSR", element: "void", cost: 6, baseAtk: 52, baseHp: 60, desc: "登場隨機秒殺一隻敵方怪獸！", faIcon: "fa-meteor", evolvableTo: 110 },
       { id: 11, name: "起源白晝鹿", rarity: "SSR", element: "light", cost: 6, baseAtk: 40, baseHp: 75, desc: "每回合開始恢復主角 15 點生命", faIcon: "fa-sun", evolvableTo: 111 },
+      
+      // 新增初階怪獸 (No.012 ~ No.017)
+      { id: 12, name: "閃電跳跳鼠", rarity: "N", element: "light", cost: 1, baseAtk: 16, baseHp: 16, desc: "進場時為我方魔力水晶 +1", faIcon: "fa-bolt-lightning", evolvableTo: 112 },
+      { id: 13, name: "幽火浮游鬼", rarity: "R", element: "fire", cost: 2, baseAtk: 24, baseHp: 22, desc: "亡語：對敵方造成 15 點同歸傷害", faIcon: "fa-ghost", evolvableTo: 113 },
+      { id: 14, name: "冰霜水晶蝶", rarity: "R", element: "water", cost: 2, baseAtk: 18, baseHp: 28, desc: "進場時凍結敵方攻擊力最高的小怪", faIcon: "fa-icicles", evolvableTo: 114 },
+      { id: 15, name: "岩甲穿山獸", rarity: "N", element: "grass", cost: 1, baseAtk: 10, baseHp: 38, desc: "自身防禦抵禦首次普通攻擊", faIcon: "fa-shield-halved", evolvableTo: 115 },
+      { id: 16, name: "雷雲狂風隼", rarity: "SR", element: "light", cost: 4, baseAtk: 36, baseHp: 44, desc: "【連擊】每回合發起兩次閃電打擊", faIcon: "fa-feather-pointed", evolvableTo: 116 },
+      { id: 17, name: "萬物創生龍", rarity: "SSR", element: "void", cost: 7, baseAtk: 60, baseHp: 80, desc: "登場直接抽滿手牌，全場友軍攻擊+10", faIcon: "fa-ring", evolvableTo: 117 },
 
+      // 究極進化形態 (No.101 ~ No.117)
       { id: 101, name: "繁花霸王蔓", rarity: "SR", element: "grass", cost: 3, baseAtk: 38, baseHp: 62, desc: "【覺醒】回合結束修復全隊 10 點生命", faIcon: "fa-clover", evolvableTo: null },
       { id: 102, name: "九霄熾焰狐", rarity: "SR", element: "fire", cost: 3, baseAtk: 46, baseHp: 45, desc: "【覺醒突襲】登場直接對敵全體噴火 15 傷", faIcon: "fa-fire-flame-curved", evolvableTo: null },
       { id: 103, name: "鎮海玄冰神龜", rarity: "SR", element: "water", cost: 3, baseAtk: 30, baseHp: 85, desc: "【覺醒護甲】受到的所有傷害減免 30%", faIcon: "fa-shield", evolvableTo: null },
@@ -841,24 +837,36 @@
       { id: 108, name: "劫燼滅世天龍", rarity: "SSR", element: "fire", cost: 5, baseAtk: 65, baseHp: 60, desc: "【毀滅貫通】溢出傷害雙倍痛擊敵方首領", faIcon: "fa-volcano", evolvableTo: null },
       { id: 109, name: "蒼洋吞界鯤", rarity: "SSR", element: "water", cost: 5, baseAtk: 38, baseHp: 110, desc: "【至尊嘲諷】每次受擊直接抽 1 張牌", faIcon: "fa-wind", evolvableTo: null },
       { id: 110, name: "終焉黑洞吞噬者", rarity: "SSR", element: "void", cost: 7, baseAtk: 72, baseHp: 80, desc: "【萬象歸虛】登場消滅兩名敵方怪獸", faIcon: "fa-circle-notch", evolvableTo: null },
-      { id: 111, name: "創世極晝天鹿", rarity: "SSR", element: "light", cost: 7, baseAtk: 58, baseHp: 105, desc: "【聖光普照】每回合開始全隊恢復 25 點生命", faIcon: "fa-star-of-david", evolvableTo: null }
+      { id: 111, name: "創世極晝天鹿", rarity: "SSR", element: "light", cost: 7, baseAtk: 58, baseHp: 105, desc: "【聖光普照】每回合開始全隊恢復 25 點生命", faIcon: "fa-star-of-david", evolvableTo: null },
+      { id: 112, name: "雷霆轟鳴巨魔鼠", rarity: "SR", element: "light", cost: 3, baseAtk: 42, baseHp: 48, desc: "【超能充電】每回合魔力上限額外永久 +1", faIcon: "fa-bolt", evolvableTo: null },
+      { id: 113, name: "冥府幽靈主宰", rarity: "SR", element: "fire", cost: 3, baseAtk: 44, baseHp: 52, desc: "【冥火索命】擊殺敵怪直接復活為我方傀儡", faIcon: "fa-biohazard", evolvableTo: null },
+      { id: 114, name: "極寒永凍冰晶凰", rarity: "SR", element: "water", cost: 4, baseAtk: 40, baseHp: 64, desc: "【暴風雪】登場對全體敵方怪獸造成 18 點凍結傷害", faIcon: "fa-certificate", evolvableTo: null },
+      { id: 115, name: "泰坦崩岩撼地巨獸", rarity: "SR", element: "grass", cost: 3, baseAtk: 32, baseHp: 90, desc: "【鋼岩之軀】反彈所受傷害的 40%", faIcon: "fa-cubes", evolvableTo: null },
+      { id: 116, name: "掣電神風天鵰", rarity: "SSR", element: "light", cost: 6, baseAtk: 62, baseHp: 68, desc: "【雷暴神罰】攻擊直擊後排首領並附帶麻痺", faIcon: "fa-plane-tail", evolvableTo: null },
+      { id: 117, name: "太古虛空終焉帝", rarity: "SSR", element: "void", cost: 8, baseAtk: 88, baseHp: 95, desc: "【神話威壓】雙方所有打出的卡牌消耗翻倍", faIcon: "fa-infinity", evolvableTo: null }
     ];
 
-    /* ================= 3. 戰役章節資料庫 ================= */
+    /* ================= 3. 戰役章節資料庫 (擴充至 8 大戰役章節) ================= */
     const STAGES_DB = [
       { id: 1, title: "第 1 區：微光森林外圍", desc: "草水小怪出沒，掉落蒼翠靈石與強化石。", bossName: "森林巨蜂王", bossElement: "grass", bossHp: 70, bossIcon: "fa-bug", rewardGold: 220, rewardExp: 60, dropStone: 3, dropMaterial: "grass_stone", deck: [1, 3, 4] },
       { id: 2, title: "第 2 區：灼熱焦土裂谷", desc: "烈焰怪獸攻勢兇猛，掉落烈焰結晶！", bossName: "熔岩魔石像", bossElement: "fire", bossHp: 110, bossIcon: "fa-mountain", rewardGold: 380, rewardExp: 90, dropStone: 4, dropMaterial: "fire_stone", deck: [2, 5, 8] },
       { id: 3, title: "第 3 區：深淵海溝神殿", desc: "沉睡水系巨獸，掉落深海秘珠！", bossName: "幻海利維坦", bossElement: "water", bossHp: 150, bossIcon: "fa-anchor", rewardGold: 550, rewardExp: 140, dropStone: 5, dropMaterial: "water_stone", deck: [3, 6, 9] },
-      { id: 4, title: "第 4 區：星辰遠古祭壇", desc: "虛空裂隙打開之地，掉落頂級虛空星核！", bossName: "混沌終焉核心", bossElement: "void", bossHp: 200, bossIcon: "fa-eye", rewardGold: 1100, rewardExp: 220, dropStone: 8, dropMaterial: "void_stone", deck: [7, 8, 9, 10, 11] }
+      { id: 4, title: "第 4 區：星辰遠古祭壇", desc: "虛空裂隙打開之地，掉落頂級虛空星核！", bossName: "混沌終焉核心", bossElement: "void", bossHp: 200, bossIcon: "fa-eye", rewardGold: 1100, rewardExp: 220, dropStone: 8, dropMaterial: "void_stone", deck: [7, 8, 9, 10, 11] },
+      { id: 5, title: "第 5 區：暴怒雷鳴尖塔", desc: "雷電狂轟的高塔，強大電系生物把守！", bossName: "蒼穹雷霆天馬", bossElement: "light", bossHp: 260, bossIcon: "fa-cloud-bolt", rewardGold: 1400, rewardExp: 280, dropStone: 10, dropMaterial: "void_stone", deck: [12, 16, 11] },
+      { id: 6, title: "第 6 區：極北永凍冰原", desc: "零下千度的極寒冰封世界，水系強敵盤踞！", bossName: "霜骸遠古魔像", bossElement: "water", bossHp: 320, bossIcon: "fa-snowflake", rewardGold: 1800, rewardExp: 350, dropStone: 12, dropMaterial: "water_stone", deck: [6, 14, 109] },
+      { id: 7, title: "第 7 區：暗黑幽冥煉獄", desc: "冥火燃燒的靈魂歸處，挑戰地獄領主！", bossName: "幽冥黃泉收割者", bossElement: "fire", bossHp: 390, bossIcon: "fa-skull-crossbones", rewardGold: 2300, rewardExp: 420, dropStone: 15, dropMaterial: "fire_stone", deck: [5, 13, 108] },
+      { id: 8, title: "第 8 區：創世神域巔峰", desc: "宇宙誕生最初之地，挑戰萬物創世龍神！", bossName: "原初創世主宰", bossElement: "void", bossHp: 480, bossIcon: "fa-sun", rewardGold: 3500, rewardExp: 600, dropStone: 20, dropMaterial: "void_stone", deck: [10, 11, 16, 17] }
     ];
 
     /* ================= 4. 成就資料庫 ================= */
     const ACHIEVEMENTS_DB = [
       { id: "stage_1", title: "微光破曉", desc: "成功通關第 1 區「微光森林外圍」", rewardGold: 300, rewardStone: 5, rewardTitle: null, check: p => p.clearedStages >= 1 },
-      { id: "stage_4", title: "星界救世主", desc: "擊破終章第 4 區「星辰遠古祭壇」", rewardGold: 2000, rewardStone: 20, rewardTitle: "星穹弒神者", check: p => p.clearedStages >= 4 },
+      { id: "stage_4", title: "星界征服者", desc: "擊破第 4 區「星辰遠古祭壇」", rewardGold: 1200, rewardStone: 15, rewardTitle: "星界征服者", check: p => p.clearedStages >= 4 },
+      { id: "stage_8", title: "神域創世者", desc: "平定全部 8 大戰役，擊敗原初創世主宰", rewardGold: 5000, rewardStone: 40, rewardTitle: "神域弒神者", check: p => p.clearedStages >= 8 },
       { id: "collect_8", title: "初具規模", desc: "幻獸圖鑑累計收集達到 8 隻", rewardGold: 500, rewardStone: 8, rewardTitle: null, check: p => p.collection.length >= 8 },
-      { id: "collect_all", title: "全圖鑑制霸", desc: "解鎖圖鑑中全部 22 隻幻獸", rewardGold: 3000, rewardStone: 30, rewardTitle: "遠古學者", check: p => p.collection.length >= 22 },
+      { id: "collect_all", title: "全圖鑑制霸", desc: "解鎖圖鑑中全部 34 隻幻獸", rewardGold: 5000, rewardStone: 50, rewardTitle: "全圖鑑大師", check: p => p.collection.length >= 34 },
       { id: "level_5", title: "初露崢嶸", desc: "召喚師等級提升至 5 級", rewardGold: 600, rewardStone: 6, rewardTitle: "資深召喚師", check: p => p.level >= 5 },
+      { id: "level_10", title: "超凡入聖", desc: "召喚師等級突破 10 級", rewardGold: 2000, rewardStone: 20, rewardTitle: "傳奇天尊", check: p => p.level >= 10 },
       { id: "upgrade_max", title: "極限突破", desc: "將任意一隻幻獸強化至滿等 (Lv.5)", rewardGold: 800, rewardStone: 10, rewardTitle: null, check: p => Object.values(p.cardLevels || {}).some(lv => lv >= 5) },
       { id: "friend_3", title: "四海皆兄弟", desc: "成功結交 3 位以上的冒險者好友", rewardGold: 400, rewardStone: 5, rewardTitle: null, check: p => (p.friends || []).length >= 3 }
     ];
@@ -887,8 +895,8 @@
       },
       {
         icon: "fa-star",
-        title: "升級成長與神化",
-        desc: "每場戰鬥可獲得召喚師經驗與強化石。怪獸升至滿等 Lv.5 後，更可消耗屬性靈石覺醒為究極神話形態！"
+        title: "升級成長與生命",
+        desc: "戰鬥獲取召喚師經驗。每升 1 級最大生命值永久 +20，怪獸滿等 Lv.5 後更可消耗靈石覺醒為究極神話形態！"
       }
     ];
 
@@ -921,7 +929,6 @@
         currentTutorialStep++;
         showTutorialModal();
       } else {
-        // 完成新手教學
         player.hasCompletedTutorial = true;
         player.gold += 300;
         player.stamina = 5;
@@ -932,7 +939,7 @@
       }
     }
 
-    /* ================= 7. 玩家資料管理、等級與體力恢復 ================= */
+    /* ================= 7. 玩家資料管理、等級與體力恢復 (升級連動HP) ================= */
     let currentAccount = null;
     let player = null;
     let selectedUpgradeCardId = null;
@@ -941,6 +948,11 @@
 
     function getMaxExpForLevel(lvl) {
       return lvl * 100;
+    }
+
+    // 計算召喚師生命值公式：基礎 80 + (等級 - 1) * 20
+    function getPlayerMaxHp(lvl) {
+      return 80 + (lvl - 1) * 20;
     }
 
     function addPlayerExp(amount) {
@@ -1098,7 +1110,6 @@
       document.getElementById('bottom-nav').classList.remove('hidden');
       updateTopBar();
       startStaminaTimer();
-      // 一律進入精美大廳，而不是直接進關卡
       switchTab('home');
       checkAndShowTutorial();
     }
@@ -1125,7 +1136,6 @@
       const expBar = document.getElementById('user-exp-bar');
       if (expBar) expBar.style.width = expPercent + '%';
 
-      // 關卡頁體力更新
       const stamDisplay = document.getElementById('stamina-display');
       if (stamDisplay) stamDisplay.innerText = `${player.stamina}/5`;
 
@@ -1143,14 +1153,12 @@
       }
     }
 
-    /* 更新大廳專屬數據與首席戰將形象 */
     function updateHomeView() {
       if (!player) return;
       document.getElementById('home-welcome-name').innerText = player.name;
       document.getElementById('home-deck-stat').innerText = `${player.deck.length} / 6 隻`;
       document.getElementById('home-stage-stat').innerText = `已征服第 ${player.clearedStages} 區`;
 
-      // 大廳體力與倒數
       document.getElementById('home-stamina-display').innerText = `${player.stamina}/5`;
       const homeTimer = document.getElementById('home-stamina-timer');
       if (player.stamina < 5) {
@@ -1163,7 +1171,6 @@
         homeTimer.classList.add('hidden');
       }
 
-      // 選擇陣容中攻擊力最強的作為大廳守護怪獸
       if (player.deck.length > 0) {
         const bestMonster = player.deck.map(id => getMonsterStats(id)).sort((a,b) => b.atk - a.atk)[0];
         document.getElementById('home-pet-icon').innerHTML = `<i class="fa-solid ${bestMonster.faIcon}"></i>`;
@@ -1178,6 +1185,8 @@
       
       document.getElementById('profile-level-val').innerText = player.level;
       document.getElementById('profile-title-val').innerText = player.title || "初心召喚師";
+      document.getElementById('profile-hp-val').innerText = `${getPlayerMaxHp(player.level)} HP`;
+
       const maxExp = getMaxExpForLevel(player.level);
       document.getElementById('profile-exp-text').innerText = `${player.exp || 0} / ${maxExp} EXP`;
       const expPct = Math.min(100, Math.max(0, ((player.exp || 0) / maxExp) * 100));
@@ -1589,7 +1598,7 @@
       closeUpgradeModal();
     }
 
-    /* ================= 13. 戰鬥核心引擎 ================= */
+    /* ================= 13. 戰鬥核心引擎 (召喚師血量連動等級) ================= */
     let battleState = {
       activeStage: null,
       turn: 1,
@@ -1683,11 +1692,13 @@
       const stage = STAGES_DB.find(s => s.id === stageId);
       if (!stage) return;
 
+      const dynamicPlayerHp = getPlayerMaxHp(player.level);
+
       battleState.activeStage = stage;
       battleState.turn = 1;
       battleState.isPlayerTurn = true;
-      battleState.playerHp = 80;
-      battleState.playerMaxHp = 80;
+      battleState.playerHp = dynamicPlayerHp;
+      battleState.playerMaxHp = dynamicPlayerHp;
       battleState.enemyHp = stage.bossHp;
       battleState.enemyMaxHp = stage.bossHp;
       battleState.playerMana = 2;
@@ -2229,7 +2240,7 @@
       renderDeckView();
     }
 
-    /* ================= 15. 召喚祭壇與圖鑑 ================= */
+    /* ================= 15. 召喚祭壇與圖鑑 (包含新初階怪獸) ================= */
     function drawGacha(times) {
       const cost = times === 1 ? 100 : 900;
       if (player.gold < cost) { alert("金幣不足！"); return; }
@@ -2276,7 +2287,7 @@
         else targetRarity = "N";
       }
 
-      const pool = MONSTER_DB.filter(m => m.id <= 11 && m.rarity === targetRarity);
+      const pool = MONSTER_DB.filter(m => m.id <= 17 && m.rarity === targetRarity);
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
