@@ -97,7 +97,7 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-  <!-- ================= 頂部狀態欄（含體力與倒數計時） ================= -->
+  <!-- ================= 頂部狀態欄 ================= -->
   <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-1.5">
     <!-- 個人資料入口 -->
     <div onclick="openProfileModal()" class="flex items-center gap-1.5 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
@@ -113,7 +113,7 @@
       </div>
     </div>
 
-    <!-- 資源、體力、成就、背包展示 (單行不折行) -->
+    <!-- 資源、體力、成就、背包展示 -->
     <div class="flex items-center gap-1.5 text-xs font-semibold shrink-0">
       <!-- 體力愛心 -->
       <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-rose-500/30 whitespace-nowrap shrink-0" title="體力（每5分鐘恢復1點）">
@@ -146,11 +146,12 @@
   <!-- ================= 主要視圖容器 ================= -->
   <main id="main-container" class="flex-1 relative overflow-hidden">
 
-    <!-- 1. 帳號密碼登入畫面 -->
+    <!-- 1. 帳號密碼登入畫面（LOGO 已改回原本的龍） -->
     <section id="view-login" class="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-4">
       <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 p-8 rounded-2xl shadow-2xl backdrop-blur-md text-center">
+        <!-- 龍圖示 LOGO -->
         <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-          <i class="fa-solid fa-shield-halved text-3xl text-white"></i>
+          <i class="fa-solid fa-dragon text-3xl text-white"></i>
         </div>
         <h1 class="title-font text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500 mb-1">幻獸啟示錄</h1>
         <p class="text-[11px] text-slate-400 tracking-widest uppercase mb-6">Chronicles of Monster Duel</p>
@@ -195,7 +196,7 @@
       </div>
     </section>
 
-    <!-- 3. 對戰場視圖 (支援中途撤退，無多餘全體進攻按鈕，回合流暢全自動) -->
+    <!-- 3. 對戰場視圖 -->
     <section id="view-battle" class="hidden h-full w-full flex flex-col justify-between bg-slate-950 relative overflow-hidden select-none">
       <!-- 敵方半場 -->
       <div class="h-[43%] bg-slate-900/40 border-b border-slate-800/80 p-3 flex flex-col justify-between relative">
@@ -217,7 +218,6 @@
           </div>
 
           <div class="flex items-center gap-3">
-            <!-- 戰鬥中途撤退按鈕 -->
             <button onclick="retreatFromBattle()" class="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 border border-rose-700/60 text-rose-300 rounded-lg text-xs font-bold transition flex items-center gap-1 active:scale-95" title="中途放棄並撤退">
               <i class="fa-solid fa-person-running"></i>
               <span>撤退</span>
@@ -275,7 +275,7 @@
       </div>
     </section>
 
-    <!-- 4. 召喚祭壇 (按鈕完全不折行) -->
+    <!-- 4. 召喚祭壇 -->
     <section id="view-gacha" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-3xl mx-auto text-center space-y-6 pt-4">
         <div>
@@ -445,7 +445,6 @@
         <button onclick="closeAchievementsModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- 分頁切換鈕 -->
       <div class="flex bg-slate-800 p-1 rounded-xl border border-slate-700">
         <button id="ach-tab-pending" onclick="switchAchievementTab(false)" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-amber-500 text-slate-950 transition whitespace-nowrap">
           進行中 / 未達成
@@ -525,7 +524,7 @@
         </button>
       </div>
 
-      <!-- 滿等覺醒極限進化按鈕 (所有怪獸滿等均解鎖) -->
+      <!-- 滿等覺醒極限進化按鈕 -->
       <div id="evolve-action-box" class="space-y-2 hidden pt-2 border-t border-slate-800">
         <div class="text-[11px] text-amber-300 font-bold">
           <i class="fa-solid fa-star text-amber-400"></i> 恭喜滿等！可消耗材料覺醒為究極神話形態！
@@ -1217,7 +1216,7 @@
       closeUpgradeModal();
     }
 
-    /* ================= 10. 戰鬥核心引擎 (回合全自動依序衝鋒攻擊＋中途撤退機制) ================= */
+    /* ================= 10. 戰鬥核心引擎 ================= */
     let battleState = {
       activeStage: null,
       turn: 1,
@@ -1525,7 +1524,6 @@
       }, 200);
     }
 
-    /* 智慧無縫交替回合判定 (出完牌或沒怪出牌自動換回合) */
     function scheduleAutoTurn() {
       clearTimeout(battleState.autoTurnTimer);
       battleState.autoTurnTimer = setTimeout(() => {
@@ -1682,7 +1680,6 @@
       announce("你的回合");
       updateBattleUI();
 
-      // 每回合開始，場上怪獸自動攻擊一輪！
       setTimeout(() => {
         if (battleState.playerBoard.length > 0) {
           executeBoardTurnStartAttacks(0);
