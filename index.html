@@ -8,13 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome 圖標 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- 自訂獨立樣式表 -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between" onclick="closeDropdownMenu(event)">
 
   <!-- 頂部狀態欄 -->
-  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
+  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-40 shadow-xl shrink-0 gap-2">
+    <!-- 個人資料入口 -->
     <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
       <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         <i class="fa-solid fa-user-astronaut"></i>
@@ -33,32 +33,43 @@
       </div>
     </div>
 
+    <!-- 資源、下拉選單、登出 -->
     <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
       <div class="flex items-center gap-1 bg-slate-800/90 px-2.5 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
 
-      <div class="relative">
-        <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
+      <!-- 功能下拉選單容器 (z-50 確保點擊永遠在最上層) -->
+      <div class="relative z-50">
+        <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="relative flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
           <i class="fa-solid fa-bars text-amber-400"></i>
           <span class="text-[11px] font-bold">選單</span>
+          <!-- 選單按鈕右上角紅點 -->
+          <span id="menu-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 border border-slate-900 animate-ping"></span>
         </button>
 
-        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-36 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1">
-          <button onclick="openFriendsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
-            <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
-            <span>冒險好友</span>
+        <!-- 下拉選單浮動層 -->
+        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-40 bg-slate-900/95 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 backdrop-blur-md">
+          <button onclick="handleMenuClick(event, openFriendsModal)" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
+              <span>冒險好友</span>
+            </div>
+            <span id="friends-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
           </button>
-          <button onclick="openInventoryModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-indigo-300 transition">
+          <button onclick="handleMenuClick(event, openInventoryModal)" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-indigo-300 transition">
             <i class="fa-solid fa-box-open text-indigo-400 w-4 text-center"></i>
             <span>冒險背包</span>
           </button>
-          <button onclick="openAchievementsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-amber-300 transition">
-            <i class="fa-solid fa-trophy text-amber-400 w-4 text-center"></i>
-            <span>成就殿堂</span>
+          <button onclick="handleMenuClick(event, openAchievementsModal)" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-amber-300 transition">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-amber-400 w-4 text-center"></i>
+              <span>成就殿堂</span>
+            </div>
+            <span id="achievements-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
           </button>
-          <button onclick="openGuideModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-emerald-300 transition border-t border-slate-800">
+          <button onclick="handleMenuClick(event, openGuideModal)" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-emerald-300 transition border-t border-slate-800">
             <i class="fa-solid fa-book-bookmark text-emerald-400 w-4 text-center"></i>
             <span>遊戲說明</span>
           </button>
@@ -519,7 +530,7 @@
     </div>
   </div>
 
-  <!-- 彈窗層：格子背包 (Item Grid) -->
+  <!-- 彈窗層：格子背包 -->
   <div id="modal-inventory" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -553,7 +564,7 @@
     </div>
   </div>
 
-  <!-- 彈窗層：怪獸強化與滿等極限進化彈窗 -->
+  <!-- 彈窗層：怪獸強化與進化彈窗 -->
   <div id="modal-upgrade" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500/80 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="upgrade-card-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-dragon"></i></div>
