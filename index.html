@@ -97,15 +97,15 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-  <!-- ================= 頂部狀態欄 ================= -->
-  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-1.5">
+  <!-- ================= 頂部狀態欄（精簡版，已將體力下移） ================= -->
+  <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
     <!-- 個人資料入口 -->
-    <div onclick="openProfileModal()" class="flex items-center gap-1.5 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
+    <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
       <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         <i class="fa-solid fa-user-astronaut"></i>
       </div>
       <div class="flex flex-col justify-center">
-        <div class="flex items-center gap-1 whitespace-nowrap">
+        <div class="flex items-center gap-1.5 whitespace-nowrap">
           <span id="user-title-display" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/60 whitespace-nowrap inline-block shrink-0 leading-none">初心召喚師</span>
           <span id="user-name-display" class="font-bold text-xs text-slate-100 whitespace-nowrap">冒險者</span>
         </div>
@@ -113,31 +113,25 @@
       </div>
     </div>
 
-    <!-- 資源、體力、成就、背包展示 -->
-    <div class="flex items-center gap-1.5 text-xs font-semibold shrink-0">
-      <!-- 體力愛心 -->
-      <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-rose-500/30 whitespace-nowrap shrink-0" title="體力（每5分鐘恢復1點）">
-        <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
-        <span id="stamina-display" class="text-rose-200 text-xs font-bold">5/5</span>
-        <span id="stamina-timer" class="text-[8px] text-slate-400 ml-0.5 hidden">05:00</span>
-      </div>
+    <!-- 資源、成就、背包展示 (單行不折行) -->
+    <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
       <!-- 金幣 -->
       <div class="flex items-center gap-1 bg-slate-800/90 px-2 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
       <!-- 成就 -->
-      <button onclick="openAchievementsModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2 py-1 rounded-full border border-yellow-500/40 text-yellow-300 transition active:scale-95 whitespace-nowrap shrink-0">
+      <button onclick="openAchievementsModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-yellow-500/40 text-yellow-300 transition active:scale-95 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-trophy text-amber-400 text-xs"></i>
         <span class="text-[11px]">成就</span>
       </button>
       <!-- 背包 -->
-      <button onclick="openInventoryModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2 py-1 rounded-full border border-indigo-500/40 text-indigo-300 transition active:scale-95 whitespace-nowrap shrink-0">
+      <button onclick="openInventoryModal()" class="flex flex-row items-center gap-1 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-indigo-500/40 text-indigo-300 transition active:scale-95 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-box-open text-indigo-400 text-xs"></i>
         <span class="text-[11px]">背包</span>
       </button>
       <!-- 登出 -->
-      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-1.5 py-1 transition shrink-0" title="登出">
+      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-2 py-1 transition shrink-0" title="登出">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
@@ -146,7 +140,7 @@
   <!-- ================= 主要視圖容器 ================= -->
   <main id="main-container" class="flex-1 relative overflow-hidden">
 
-    <!-- 1. 帳號密碼登入畫面（LOGO 已改回原本的龍） -->
+    <!-- 1. 帳號密碼登入畫面 -->
     <section id="view-login" class="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-4">
       <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 p-8 rounded-2xl shadow-2xl backdrop-blur-md text-center">
         <!-- 龍圖示 LOGO -->
@@ -179,15 +173,21 @@
       </div>
     </section>
 
-    <!-- 2. 冒險關卡章節視圖 -->
+    <!-- 2. 冒險關卡章節視圖 (體力移至標題右側) -->
     <section id="view-stages" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 gap-2">
           <div>
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot"></i> 戰役章節
             </h2>
-            <p class="text-xs text-slate-400">每次挑戰消耗 1 點體力。通關可得物資靈石並解鎖成就！</p>
+            <p class="text-xs text-slate-400 mt-0.5">每次挑戰消耗 1 點體力。通關可得物資靈石並解鎖成就！</p>
+          </div>
+          <!-- 體力愛心與倒數計時膠囊移至此處 -->
+          <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-2xl border border-rose-500/40 shadow-lg whitespace-nowrap shrink-0" title="體力（每5分鐘恢復1點）">
+            <i class="fa-solid fa-heart text-rose-500 text-sm animate-pulse"></i>
+            <span id="stamina-display" class="text-rose-200 text-xs font-bold">5/5</span>
+            <span id="stamina-timer" class="text-[10px] text-slate-400 ml-0.5 hidden font-mono">05:00</span>
           </div>
         </div>
 
@@ -595,7 +595,7 @@
 
   <!-- ================= JavaScript 核心引擎 ================= -->
   <script>
-    /* ================= 1. 幻獸資料庫 (移除全部 Emoji，全面採用 FontAwesome) ================= */
+    /* ================= 1. 幻獸資料庫 ================= */
     const MONSTER_DB = [
       // 初階怪獸 (No.001 ~ No.011)
       { id: 1, name: "青芽草泥球", rarity: "N", element: "grass", cost: 1, baseAtk: 14, baseHp: 28, desc: "未受傷時自我修復 8 點生命", faIcon: "fa-seedling", evolvableTo: 101 },
@@ -610,7 +610,7 @@
       { id: 10, name: "星穹噬光獸", rarity: "SSR", element: "void", cost: 6, baseAtk: 52, baseHp: 60, desc: "登場隨機秒殺一隻敵方怪獸！", faIcon: "fa-meteor", evolvableTo: 110 },
       { id: 11, name: "起源白晝鹿", rarity: "SSR", element: "light", cost: 6, baseAtk: 40, baseHp: 75, desc: "每回合開始恢復主角 15 點生命", faIcon: "fa-sun", evolvableTo: 111 },
 
-      // 究極進化形態 (No.101 ~ No.111，圖鑑全收錄)
+      // 究極進化形態 (No.101 ~ No.111)
       { id: 101, name: "繁花霸王蔓", rarity: "SR", element: "grass", cost: 3, baseAtk: 38, baseHp: 62, desc: "【覺醒】回合結束修復全隊 10 點生命", faIcon: "fa-clover", evolvableTo: null },
       { id: 102, name: "九霄熾焰狐", rarity: "SR", element: "fire", cost: 3, baseAtk: 46, baseHp: 45, desc: "【覺醒突襲】登場直接對敵全體噴火 15 傷", faIcon: "fa-fire-flame-curved", evolvableTo: null },
       { id: 103, name: "鎮海玄冰神龜", rarity: "SR", element: "water", cost: 3, baseAtk: 30, baseHp: 85, desc: "【覺醒護甲】受到的所有傷害減免 30%", faIcon: "fa-shield", evolvableTo: null },
@@ -797,17 +797,21 @@
       document.getElementById('user-title-display').innerText = player.title || "初心召喚師";
       document.getElementById('user-level').innerText = player.level;
       document.getElementById('gold-display').innerText = player.gold;
-      document.getElementById('stamina-display').innerText = `${player.stamina}/5`;
+      
+      const stamDisplay = document.getElementById('stamina-display');
+      if (stamDisplay) stamDisplay.innerText = `${player.stamina}/5`;
 
       const timerEl = document.getElementById('stamina-timer');
-      if (player.stamina < 5) {
-        const remainingMs = Math.max(0, (5 * 60 * 1000) - (Date.now() - player.lastStaminaUpdate));
-        const mins = Math.floor(remainingMs / 60000);
-        const secs = Math.floor((remainingMs % 60000) / 1000);
-        timerEl.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-        timerEl.classList.remove('hidden');
-      } else {
-        timerEl.classList.add('hidden');
+      if (timerEl) {
+        if (player.stamina < 5) {
+          const remainingMs = Math.max(0, (5 * 60 * 1000) - (Date.now() - player.lastStaminaUpdate));
+          const mins = Math.floor(remainingMs / 60000);
+          const secs = Math.floor((remainingMs % 60000) / 1000);
+          timerEl.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+          timerEl.classList.remove('hidden');
+        } else {
+          timerEl.classList.add('hidden');
+        }
       }
     }
 
