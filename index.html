@@ -40,23 +40,23 @@
         <span id="gold-display" class="text-amber-200 text-xs font-bold">1000</span>
       </div>
 
-      <!-- 功能下拉選單容器 (z-50 確保點擊永遠在最上層) -->
+      <!-- 下拉選單容器 -->
       <div class="relative z-50">
         <button id="btn-dropdown-toggle" onclick="toggleDropdownMenu(event)" class="relative flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 px-2.5 py-1 rounded-full border border-slate-700 text-slate-200 transition active:scale-95 whitespace-nowrap">
           <i class="fa-solid fa-bars text-amber-400"></i>
           <span class="text-[11px] font-bold">選單</span>
-          <!-- 選單按鈕右上角紅點 -->
-          <span id="menu-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 border border-slate-900 animate-ping"></span>
+          <!-- 選單紅色小圓點提醒 -->
+          <span id="menu-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-slate-900 animate-pulse"></span>
         </button>
 
-        <!-- 下拉選單浮動層 -->
+        <!-- 下拉清單 -->
         <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-40 bg-slate-900/95 border border-slate-700 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 backdrop-blur-md">
           <button onclick="handleMenuClick(event, openFriendsModal)" class="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-sky-300 transition">
             <div class="flex items-center gap-2">
               <i class="fa-solid fa-user-group text-sky-400 w-4 text-center"></i>
               <span>冒險好友</span>
             </div>
-            <span id="friends-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span id="friends-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
           </button>
           <button onclick="handleMenuClick(event, openInventoryModal)" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-indigo-300 transition">
             <i class="fa-solid fa-box-open text-indigo-400 w-4 text-center"></i>
@@ -67,7 +67,7 @@
               <i class="fa-solid fa-trophy text-amber-400 w-4 text-center"></i>
               <span>成就殿堂</span>
             </div>
-            <span id="achievements-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span id="achievements-badge" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
           </button>
           <button onclick="handleMenuClick(event, openGuideModal)" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-xs font-bold text-emerald-300 transition border-t border-slate-800">
             <i class="fa-solid fa-book-bookmark text-emerald-400 w-4 text-center"></i>
@@ -180,8 +180,7 @@
           </div>
         </div>
 
-        <div id="stages-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12">
-        </div>
+        <div id="stages-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-12"></div>
       </div>
     </section>
 
@@ -217,8 +216,7 @@
           </div>
         </div>
 
-        <div id="enemy-board" class="flex justify-center items-center gap-3 md:gap-6 py-1">
-        </div>
+        <div id="enemy-board" class="flex justify-center items-center gap-3 md:gap-6 py-1"></div>
       </div>
 
       <div id="battle-announcer" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none text-center hidden">
@@ -228,8 +226,7 @@
       </div>
 
       <div class="h-[57%] bg-slate-900/70 p-3 flex flex-col justify-between relative">
-        <div id="player-board" class="flex justify-center items-center gap-3 md:gap-6 py-1">
-        </div>
+        <div id="player-board" class="flex justify-center items-center gap-3 md:gap-6 py-1"></div>
 
         <div class="flex items-center justify-between border-t border-slate-800/80 pt-1.5">
           <div class="flex items-center gap-3">
@@ -249,13 +246,11 @@
             <div class="text-[11px] font-bold text-sky-400 flex items-center gap-1">
               <i class="fa-solid fa-bolt"></i> 魔力水晶 <span id="player-mana-text">2/2</span>
             </div>
-            <div id="mana-crystals" class="flex gap-1 mt-0.5">
-            </div>
+            <div id="mana-crystals" class="flex gap-1 mt-0.5"></div>
           </div>
         </div>
 
-        <div class="h-28 flex items-center justify-center gap-2 overflow-x-auto no-scrollbar pt-1" id="player-hand">
-        </div>
+        <div class="h-28 flex items-center justify-center gap-2 overflow-x-auto no-scrollbar pt-1" id="player-hand"></div>
       </div>
     </section>
 
@@ -293,7 +288,7 @@
       </div>
     </section>
 
-    <!-- 5. 幻獸圖鑑視圖 -->
+    <!-- 5. 幻獸圖鑑 -->
     <section id="view-codex" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6 pb-12">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -301,22 +296,20 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-book-atlas"></i> 幻獸圖鑑百科
             </h2>
-            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/34</span>（含全體究極神話形態）</p>
+            <p class="text-xs text-slate-400">圖鑑收集進度：<span id="codex-progress" class="text-amber-300 font-bold">0/34</span></p>
           </div>
         </div>
-
-        <div id="codex-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        </div>
+        <div id="codex-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
       </div>
     </section>
 
-    <!-- 6. 牌組配置視圖 -->
+    <!-- 6. 牌組配置 -->
     <section id="view-deck" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-4 pb-12">
         <div class="flex justify-between items-center border-b border-slate-800 pb-3 gap-2">
           <div>
             <h2 class="text-xl sm:text-2xl font-black text-amber-400">出征牌組與養成</h2>
-            <p class="text-[11px] text-slate-400">挑選 <span class="text-emerald-400 font-bold">4 ~ 6 張唯一怪獸</span> 出征，點擊怪獸可升級與進化！</p>
+            <p class="text-[11px] text-slate-400">挑選 <span class="text-emerald-400 font-bold">4 ~ 6 張唯一怪獸</span> 出征！</p>
           </div>
           <button onclick="autoFillDeck()" class="px-3 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0">
             組建最強陣容
@@ -324,12 +317,10 @@
         </div>
 
         <div class="text-xs font-bold text-slate-300">出征陣容（已裝備 <span id="deck-count" class="text-amber-400 font-bold">0</span>/6）：</div>
-        <div id="deck-active-list" class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800 min-h-[120px]">
-        </div>
+        <div id="deck-active-list" class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800 min-h-[120px]"></div>
 
-        <div class="text-xs font-bold text-slate-400 pt-2">我的幻獸陣容 (點擊卡牌打開「強化／進化」介面)：</div>
-        <div id="deck-pool-list" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
-        </div>
+        <div class="text-xs font-bold text-slate-400 pt-2">我的幻獸陣容 (點擊卡牌打開「強化／進化」)：</div>
+        <div id="deck-pool-list" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3"></div>
       </div>
     </section>
 
@@ -355,7 +346,7 @@
   </nav>
 
   <!-- 彈窗層：個人檔案 -->
-  <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-profile" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h3 class="text-base font-black text-amber-400 flex items-center gap-2">
@@ -406,15 +397,14 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-400 mb-1">佩戴專屬稱號</label>
-          <div id="profile-titles-list" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1 bg-slate-950/50 rounded-lg border border-slate-800">
-          </div>
+          <div id="profile-titles-list" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1 bg-slate-950/50 rounded-lg border border-slate-800"></div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 彈窗層：獨立好友系統 -->
-  <div id="modal-friends" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-friends" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h3 class="text-base font-black text-sky-400 flex items-center gap-2">
@@ -435,7 +425,7 @@
 
       <div id="friend-requests-box" class="hidden bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/40 space-y-1.5">
         <div class="text-[11px] font-bold text-amber-300 flex items-center gap-1">
-          <i class="fa-solid fa-bell animate-pulse"></i> 收到新的好友審核邀請：
+          <i class="fa-solid fa-bell animate-pulse"></i> 收到好友審核邀請：
         </div>
         <div id="friend-requests-list" class="space-y-1"></div>
       </div>
@@ -444,14 +434,13 @@
         <div class="text-xs font-bold text-slate-300 flex items-center gap-1.5 mb-1">
           <i class="fa-solid fa-user-group text-emerald-400"></i> 好友名冊 (<span id="friends-count">0</span>/20)
         </div>
-        <div id="friends-list-container" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
-        </div>
+        <div id="friends-list-container" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar"></div>
       </div>
     </div>
   </div>
 
-  <!-- 彈窗層：遊戲玩法說明指南 -->
-  <div id="modal-guide" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：遊戲玩法說明指南 (提升 z-index 確保點擊立即可見) -->
+  <div id="modal-guide" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-emerald-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h3 class="text-base font-black text-emerald-400 flex items-center gap-2">
@@ -484,30 +473,27 @@
     </div>
   </div>
 
-  <!-- 彈窗層：初次遊玩新手教學動畫引導 -->
-  <div id="modal-tutorial" class="fixed inset-0 bg-black/95 z-[80] flex items-center justify-center p-4 hidden">
-    <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-5 shadow-[0_0_50px_rgba(234,179,8,0.5)]">
+  <!-- 彈窗層：初次遊玩新手教學動畫引導 (增設動態光圈與高層級) -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-black/95 z-[90] flex items-center justify-center p-4 hidden">
+    <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-5 shadow-[0_0_60px_rgba(234,179,8,0.5)] transform transition-all duration-300">
       <div id="tutorial-icon" class="text-6xl text-amber-400 animate-bounce">
         <i class="fa-solid fa-scroll"></i>
       </div>
-
       <div>
         <h3 id="tutorial-title" class="title-font text-2xl font-black text-amber-300">契約締結！初入大陸</h3>
         <p id="tutorial-step-indicator" class="text-[10px] text-amber-500 font-bold uppercase tracking-widest mt-0.5">步驟 1 / 3</p>
       </div>
-
       <p id="tutorial-desc" class="text-xs text-slate-300 bg-slate-800/80 p-4 rounded-2xl border border-slate-700 text-left leading-relaxed min-h-[90px]">
         歡迎加入《幻獸啟示錄》！身為初出茅廬的召喚師，你已獲得一套專屬的初代幻獸陣容！
       </p>
-
-      <button id="tutorial-next-btn" onclick="nextTutorialStep()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition shadow-lg">
+      <button id="tutorial-next-btn" onclick="nextTutorialStep()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition shadow-lg active:scale-95">
         下一步
       </button>
     </div>
   </div>
 
   <!-- 彈窗層：成就系統 -->
-  <div id="modal-achievements" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-achievements" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-yellow-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h3 class="text-base font-black text-amber-400 flex items-center gap-2">
@@ -525,13 +511,12 @@
         </button>
       </div>
 
-      <div id="achievements-list-container" class="space-y-2.5">
-      </div>
+      <div id="achievements-list-container" class="space-y-2.5"></div>
     </div>
   </div>
 
-  <!-- 彈窗層：格子背包 -->
-  <div id="modal-inventory" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：背包 -->
+  <div id="modal-inventory" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <h3 class="text-base font-black text-amber-400 flex items-center gap-2">
@@ -539,33 +524,26 @@
         </h3>
         <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
       </div>
-
       <p class="text-[11px] text-slate-400 text-left">點擊任一物品格子可檢視詳細檔案與用途：</p>
-      
-      <div id="inventory-grid" class="grid grid-cols-4 gap-2.5 bg-slate-950/70 p-3 rounded-xl border border-slate-800 min-h-[190px]">
-      </div>
+      <div id="inventory-grid" class="grid grid-cols-4 gap-2.5 bg-slate-950/70 p-3 rounded-xl border border-slate-800 min-h-[190px]"></div>
     </div>
   </div>
 
-  <!-- 彈窗層：物品詳情彈窗 -->
-  <div id="modal-item-detail" class="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：物品詳情 -->
+  <div id="modal-item-detail" class="fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-4 hidden">
     <div class="max-w-xs w-full bg-slate-900 border-2 border-indigo-500/80 p-5 rounded-2xl text-center space-y-3 shadow-2xl">
       <div id="item-detail-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-gem"></i></div>
       <div>
         <h4 id="item-detail-name" class="text-base font-black text-amber-300">幻獸強化石</h4>
         <div id="item-detail-count" class="text-xs text-slate-400 mt-0.5">擁有數量: 12</div>
       </div>
-      <p id="item-detail-desc" class="text-xs text-slate-300 bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-left leading-relaxed">
-        物品介紹內容...
-      </p>
-      <button onclick="closeItemDetailModal()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition">
-        確定
-      </button>
+      <p id="item-detail-desc" class="text-xs text-slate-300 bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-left leading-relaxed">物品介紹內容...</p>
+      <button onclick="closeItemDetailModal()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition">確定</button>
     </div>
   </div>
 
-  <!-- 彈窗層：怪獸強化與進化彈窗 -->
-  <div id="modal-upgrade" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：怪獸強化與滿等進化 -->
+  <div id="modal-upgrade" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500/80 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="upgrade-card-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-dragon"></i></div>
       <div>
@@ -606,14 +584,12 @@
         </button>
       </div>
 
-      <button onclick="closeUpgradeModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-bold rounded-lg transition">
-        返回
-      </button>
+      <button onclick="closeUpgradeModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs font-bold rounded-lg transition">返回</button>
     </div>
   </div>
 
-  <!-- 彈窗層：抽卡結果彈窗 -->
-  <div id="modal-gacha-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：抽卡結果 -->
+  <div id="modal-gacha-result" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-2xl w-full bg-slate-900 border border-amber-500/50 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <h3 class="text-xl font-black text-amber-400">召喚結果</h3>
       
@@ -623,27 +599,22 @@
         <span id="gacha-compensation-text"></span>
       </div>
 
-      <button onclick="closeGachaModal()" class="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">
-        收下幻獸
-      </button>
+      <button onclick="closeGachaModal()" class="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">收下幻獸</button>
     </div>
   </div>
 
-  <!-- 彈窗層：戰鬥結算彈窗 -->
-  <div id="modal-battle-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+  <!-- 彈窗層：戰鬥結算 -->
+  <div id="modal-battle-result" class="fixed inset-0 bg-black/85 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="battle-result-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-trophy"></i></div>
       <h3 id="battle-result-title" class="text-2xl font-black text-amber-400">戰鬥勝利！</h3>
       <p id="battle-result-desc" class="text-xs text-slate-300">成功討伐首領，獲得豐富材料物資！</p>
-      <div id="battle-rewards" class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-xs font-bold text-amber-300 space-y-1 text-left">
-      </div>
-      <button onclick="exitBattle()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">
-        返回戰役地圖
-      </button>
+      <div id="battle-rewards" class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-xs font-bold text-amber-300 space-y-1 text-left"></div>
+      <button onclick="exitBattle()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">返回戰役地圖</button>
     </div>
   </div>
 
-  <!-- 彈窗層：等級提升特效彈窗 -->
+  <!-- 彈窗層：等級提升特效 -->
   <div id="modal-level-up" class="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 hidden">
     <div class="max-w-xs w-full bg-gradient-to-b from-amber-950/80 via-slate-900 to-slate-950 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-4 shadow-[0_0_50px_rgba(250,204,21,0.5)] animate-bounce">
       <div class="text-6xl text-amber-400"><i class="fa-solid fa-shield-halved"></i></div>
@@ -657,13 +628,11 @@
         <div class="text-amber-300 font-bold"><i class="fa-solid fa-coins mr-1"></i>獲得晉升金幣 +200</div>
         <div class="text-sky-400 font-bold"><i class="fa-solid fa-gem mr-1"></i>獲得幻獸強化石 +3</div>
       </div>
-      <button onclick="closeLevelUpModal()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm rounded-xl transition shadow-lg">
-        領取晉升榮耀
-      </button>
+      <button onclick="closeLevelUpModal()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm rounded-xl transition shadow-lg">領取晉升榮耀</button>
     </div>
   </div>
 
-  <!-- 引入獨立 JavaScript 主程式碼 -->
-  <script src="app.js"></script>
+  <!-- 引入模組化主程式碼 -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
