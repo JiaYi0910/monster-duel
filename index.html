@@ -8,104 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome 圖標 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Sans+TC:wght@400;700;900&display=swap');
-    
-    :root {
-      --sat: env(safe-area-inset-top, 20px);
-      --sab: env(safe-area-inset-bottom, 15px);
-    }
-
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      background-color: #070a13;
-      color: #f3f4f6;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .title-font { font-family: 'Cinzel', serif; }
-
-    /* iPhone 瀏海與動態島安全區適配 */
-    .safe-top-bar {
-      padding-top: max(var(--sat), 16px) !important;
-      height: calc(3.8rem + max(var(--sat), 16px)) !important;
-    }
-    .safe-bottom-nav {
-      padding-bottom: max(var(--sab), 10px) !important;
-      height: calc(4.2rem + max(var(--sab), 10px)) !important;
-    }
-
-    /* 稀有度光芒特效 */
-    .glow-ssr { box-shadow: 0 0 16px rgba(234, 179, 8, 0.7); border-color: #eab308 !important; }
-    .glow-sr { box-shadow: 0 0 12px rgba(168, 85, 247, 0.6); border-color: #a855f7 !important; }
-    .glow-r { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); border-color: #3b82f6 !important; }
-    .glow-n { border-color: #64748b !important; }
-
-    .playable-card {
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.85);
-      border-color: #38bdf8 !important;
-      transform: translateY(-4px);
-    }
-
-    /* 召喚陣旋轉圈圈特效 */
-    @keyframes spinCircle { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes spinCircleReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-    .anim-magic-circle { animation: spinCircle 10s linear infinite; }
-    .anim-magic-circle-rev { animation: spinCircleReverse 14s linear infinite; }
-
-    /* 戰鬥動畫 */
-    .anim-dash-up { animation: dashUp 0.35s ease-in-out; }
-    @keyframes dashUp {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-70px) scale(1.15); }
-      100% { transform: translateY(0); }
-    }
-    .anim-dash-down { animation: dashDown 0.35s ease-in-out; }
-    @keyframes dashDown {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(70px) scale(1.15); }
-      100% { transform: translateY(0); }
-    }
-    .anim-shake { animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both; }
-    @keyframes shake {
-      10%, 90% { transform: translate3d(-3px, 0, 0); }
-      20%, 80% { transform: translate3d(4px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-      40%, 60% { transform: translate3d(6px, 0, 0); }
-    }
-
-    /* 浮動傷害飄字 */
-    @keyframes floatUp {
-      0% { opacity: 0; transform: translateY(0) scale(0.6); }
-      30% { opacity: 1; transform: translateY(-20px) scale(1.3); }
-      100% { opacity: 0; transform: translateY(-50px) scale(1); }
-    }
-    .damage-pop {
-      position: absolute;
-      pointer-events: none;
-      font-weight: 900;
-      animation: floatUp 0.8s ease-out forwards;
-      z-index: 50;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-    }
-
-    /* 主城守護獸浮動呼吸 */
-    @keyframes floatPet {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .anim-float-pet { animation: floatPet 3.5s ease-in-out infinite; }
-
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+  <!-- 自訂獨立樣式表 -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between" onclick="closeDropdownMenu(event)">
 
-  <!-- ================= 頂部狀態欄 ================= -->
+  <!-- 頂部狀態欄 -->
   <header id="top-bar" class="hidden safe-top-bar bg-slate-900/95 border-b border-slate-800 px-3 md:px-8 flex items-center justify-between z-30 shadow-xl shrink-0 gap-2">
-    <!-- 個人資料入口 -->
     <div onclick="openProfileModal()" class="flex items-center gap-2 cursor-pointer p-1 rounded-xl hover:bg-slate-800/80 transition active:scale-95 shrink-0">
       <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md text-xs shrink-0">
         <i class="fa-solid fa-user-astronaut"></i>
@@ -115,7 +24,6 @@
           <span id="user-title-display" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-600/60 whitespace-nowrap inline-block shrink-0 leading-none">初心召喚師</span>
           <span id="user-name-display" class="font-bold text-xs text-slate-100 whitespace-nowrap">冒險者</span>
         </div>
-        <!-- 等級與經驗進度條 -->
         <div class="flex items-center gap-1.5 mt-0.5">
           <span class="text-[9px] text-amber-400 font-black">Lv.<span id="user-level">1</span></span>
           <div class="w-14 bg-slate-800 h-1.5 rounded-full overflow-hidden border border-slate-700">
@@ -125,7 +33,6 @@
       </div>
     </div>
 
-    <!-- 資源、下拉選單、登出 -->
     <div class="flex items-center gap-2 text-xs font-semibold shrink-0">
       <div class="flex items-center gap-1 bg-slate-800/90 px-2.5 py-1 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
@@ -164,7 +71,7 @@
     </div>
   </header>
 
-  <!-- ================= 主要視圖容器 ================= -->
+  <!-- 主要視圖容器 -->
   <main id="main-container" class="flex-1 relative overflow-hidden">
 
     <!-- 0. 帳號密碼登入畫面 -->
@@ -269,7 +176,6 @@
 
     <!-- 3. 對戰場視圖 -->
     <section id="view-battle" class="hidden h-full w-full flex flex-col justify-between bg-slate-950 relative overflow-hidden select-none">
-      <!-- 敵方半場 -->
       <div class="h-[43%] bg-slate-900/40 border-b border-slate-800/80 p-3 flex flex-col justify-between relative">
         <div class="flex items-center justify-between">
           <div id="enemy-hero-box" class="flex items-center gap-3 p-1.5 rounded-xl transition duration-200">
@@ -304,14 +210,12 @@
         </div>
       </div>
 
-      <!-- 中場狀態通知廣播 -->
       <div id="battle-announcer" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none text-center hidden">
         <div id="announcer-text" class="text-2xl md:text-4xl font-black text-amber-300 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] animate-bounce">
           你的回合
         </div>
       </div>
 
-      <!-- 我方半場 -->
       <div class="h-[57%] bg-slate-900/70 p-3 flex flex-col justify-between relative">
         <div id="player-board" class="flex justify-center items-center gap-3 md:gap-6 py-1">
         </div>
@@ -420,7 +324,7 @@
 
   </main>
 
-  <!-- ================= 底部導覽列 ================= -->
+  <!-- 底部導覽列 -->
   <nav id="bottom-nav" class="hidden safe-bottom-nav bg-slate-900/95 border-t border-slate-800 flex justify-around items-center px-1 z-30 shadow-2xl shrink-0">
     <button onclick="switchTab('home')" class="nav-tab-btn flex flex-col items-center gap-1 text-amber-400 font-bold text-[11px]" data-target="home">
       <i class="fa-solid fa-chess-rook text-base"></i> 大廳
@@ -439,7 +343,7 @@
     </button>
   </nav>
 
-  <!-- ================= 彈窗層：個人檔案 ================= -->
+  <!-- 彈窗層：個人檔案 -->
   <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -498,7 +402,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：獨立好友系統 ================= -->
+  <!-- 彈窗層：獨立好友系統 -->
   <div id="modal-friends" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -535,7 +439,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：遊戲玩法說明指南 ================= -->
+  <!-- 彈窗層：遊戲玩法說明指南 -->
   <div id="modal-guide" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-emerald-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -569,7 +473,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：初次遊玩新手教學動畫引導 ================= -->
+  <!-- 彈窗層：初次遊玩新手教學動畫引導 -->
   <div id="modal-tutorial" class="fixed inset-0 bg-black/95 z-[80] flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-5 shadow-[0_0_50px_rgba(234,179,8,0.5)]">
       <div id="tutorial-icon" class="text-6xl text-amber-400 animate-bounce">
@@ -591,7 +495,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：成就系統 ================= -->
+  <!-- 彈窗層：成就系統 -->
   <div id="modal-achievements" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-yellow-500/60 p-6 rounded-2xl space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -615,7 +519,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：格子背包 (Item Grid) ================= -->
+  <!-- 彈窗層：格子背包 (Item Grid) -->
   <div id="modal-inventory" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -632,7 +536,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：物品詳情彈窗 ================= -->
+  <!-- 彈窗層：物品詳情彈窗 -->
   <div id="modal-item-detail" class="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4 hidden">
     <div class="max-w-xs w-full bg-slate-900 border-2 border-indigo-500/80 p-5 rounded-2xl text-center space-y-3 shadow-2xl">
       <div id="item-detail-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-gem"></i></div>
@@ -649,7 +553,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：怪獸強化與滿等極限進化彈窗 ================= -->
+  <!-- 彈窗層：怪獸強化與滿等極限進化彈窗 -->
   <div id="modal-upgrade" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500/80 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="upgrade-card-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-dragon"></i></div>
@@ -697,15 +601,13 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：抽卡結果彈窗 (增設重複補償明細) ================= -->
+  <!-- 彈窗層：抽卡結果彈窗 -->
   <div id="modal-gacha-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-2xl w-full bg-slate-900 border border-amber-500/50 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <h3 class="text-xl font-black text-amber-400">召喚結果</h3>
       
-      <!-- 卡牌容器 -->
       <div id="gacha-cards-container" class="grid grid-cols-2 sm:grid-cols-5 gap-3 max-h-[55vh] overflow-y-auto p-2 no-scrollbar"></div>
       
-      <!-- 補償統計欄位 -->
       <div id="gacha-compensation-banner" class="hidden bg-amber-950/60 p-2.5 rounded-xl border border-amber-500/50 text-xs font-bold text-amber-300">
         <span id="gacha-compensation-text"></span>
       </div>
@@ -716,7 +618,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：戰鬥結算彈窗 ================= -->
+  <!-- 彈窗層：戰鬥結算彈窗 -->
   <div id="modal-battle-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <div id="battle-result-icon" class="text-5xl text-amber-400"><i class="fa-solid fa-trophy"></i></div>
@@ -730,7 +632,7 @@
     </div>
   </div>
 
-  <!-- ================= 彈窗層：等級提升特效彈窗 ================= -->
+  <!-- 彈窗層：等級提升特效彈窗 -->
   <div id="modal-level-up" class="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 hidden">
     <div class="max-w-xs w-full bg-gradient-to-b from-amber-950/80 via-slate-900 to-slate-950 border-2 border-amber-400 p-6 rounded-3xl text-center space-y-4 shadow-[0_0_50px_rgba(250,204,21,0.5)] animate-bounce">
       <div class="text-6xl text-amber-400"><i class="fa-solid fa-shield-halved"></i></div>
@@ -750,159 +652,7 @@
     </div>
   </div>
 
-  <!-- ================= Firebase 初始化與全域綁定 ================= -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCs4w7IIxxpl3_SWIVZ9IRaoN0YVA2NvMc",
-      authDomain: "monster-duel-cc061.firebaseapp.com",
-      projectId: "monster-duel-cc061",
-      storageBucket: "monster-duel-cc061.firebasestorage.app",
-      messagingSenderId: "303521746084",
-      appId: "1:303521746084:web:e9541d1d31d15019d46a31",
-      measurementId: "G-SKEPDJWZGM"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    try {
-      const analytics = getAnalytics(app);
-      window.firebaseApp = app;
-      window.firebaseAnalytics = analytics;
-    } catch(e) {
-      console.log("Analytics optional in local environment", e);
-    }
-  </script>
-
-  <!-- ================= JavaScript 核心引擎 ================= -->
-  <script>
-    /* ================= 15. 召喚祭壇與圖鑑 (包含嚴格重複補償結算修復) ================= */
-    function drawGacha(times) {
-      const cost = times === 1 ? 100 : 900;
-      if (player.gold < cost) { alert("金幣不足！快去戰役關卡獲取賞金！"); return; }
-
-      player.gold -= cost;
-      const pulledCards = [];
-
-      for (let i = 0; i < times; i++) {
-        const isGuaranteed = (times === 10 && i === 9);
-        pulledCards.push(getRandomMonster(isGuaranteed));
-      }
-
-      let extraGold = 0;
-      let extraStones = 0;
-      const processedResults = [];
-
-      // 建立當前擁有集合以防同批次連續抽中判斷失效
-      const ownedSet = new Set(player.collection);
-
-      pulledCards.forEach(c => {
-        if (!ownedSet.has(c.id)) {
-          // 全新獲得的幻獸
-          player.collection.push(c.id);
-          player.cardLevels[c.id] = 1;
-          ownedSet.add(c.id);
-          processedResults.push({ card: c, isDuplicate: false });
-        } else {
-          // 已擁有，發放嚴格補償
-          extraGold += 50;
-          extraStones += 2;
-          processedResults.push({ card: c, isDuplicate: true });
-        }
-      });
-
-      player.gold += extraGold;
-      player.inventory.upgradeStone = (player.inventory.upgradeStone || 0) + extraStones;
-
-      saveCurrentPlayerData();
-      showGachaModal(processedResults, extraGold, extraStones);
-    }
-
-    function getRandomMonster(guaranteeR) {
-      const rand = Math.random() * 100;
-      let targetRarity = "N";
-
-      if (guaranteeR) {
-        if (rand < 10) targetRarity = "SSR";
-        else if (rand < 40) targetRarity = "SR";
-        else targetRarity = "R";
-      } else {
-        if (rand < 5) targetRarity = "SSR";
-        else if (rand < 20) targetRarity = "SR";
-        else if (rand < 55) targetRarity = "R";
-        else targetRarity = "N";
-      }
-
-      const pool = MONSTER_DB.filter(m => m.id <= 17 && m.rarity === targetRarity);
-      return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    function showGachaModal(results, extraGold, extraStones) {
-      const modal = document.getElementById('modal-gacha-result');
-      const container = document.getElementById('gacha-cards-container');
-      container.innerHTML = '';
-
-      results.forEach(res => {
-        const card = res.card;
-        const item = document.createElement('div');
-        const glow = card.rarity === 'SSR' ? 'glow-ssr' : card.rarity === 'SR' ? 'glow-sr' : 'glow-r';
-        item.className = `p-3 rounded-xl bg-slate-800 border-2 ${glow} flex flex-col items-center justify-between text-center relative`;
-        
-        item.innerHTML = `
-          <div class="flex justify-between items-center w-full">
-            <span class="text-xs font-bold text-amber-300">${card.rarity}</span>
-            ${res.isDuplicate ? '<span class="text-[9px] px-1.5 py-0.2 bg-amber-950 text-amber-300 border border-amber-600/60 rounded font-bold">已擁有</span>' : '<span class="text-[9px] px-1.5 py-0.2 bg-emerald-950 text-emerald-300 border border-emerald-600/60 rounded font-bold">NEW</span>'}
-          </div>
-          <div class="text-3xl my-2 text-amber-400"><i class="fa-solid ${card.faIcon}"></i></div>
-          <div class="text-xs font-black text-white truncate w-full">${card.name}</div>
-          <div class="text-[10px] text-rose-300 font-bold mt-1">ATK ${card.baseAtk} ｜ HP ${card.baseHp}</div>
-          ${res.isDuplicate ? '<div class="text-[9px] text-amber-400 font-bold mt-1 pt-1 border-t border-slate-700/60 w-full">+50🪙 +2💎</div>' : ''}
-        `;
-        container.appendChild(item);
-      });
-
-      // 補償統計橫條
-      const banner = document.getElementById('gacha-compensation-banner');
-      const bannerText = document.getElementById('gacha-compensation-text');
-      if (extraGold > 0 || extraStones > 0) {
-        bannerText.innerHTML = `<i class="fa-solid fa-gift mr-1 text-amber-400"></i>獲得重複幻獸轉換補償：金幣 +${extraGold} 🪙 ｜ 幻獸強化石 +${extraStones} 💎`;
-        banner.classList.remove('hidden');
-      } else {
-        banner.classList.add('hidden');
-      }
-
-      modal.classList.remove('hidden');
-    }
-    function closeGachaModal() { document.getElementById('modal-gacha-result').classList.add('hidden'); }
-
-    function renderCodex() {
-      const container = document.getElementById('codex-grid');
-      container.innerHTML = '';
-      let unlockedCount = 0;
-
-      MONSTER_DB.forEach(monster => {
-        const isUnlocked = player.collection.includes(monster.id);
-        if (isUnlocked) unlockedCount++;
-
-        const card = document.createElement('div');
-        const isEvo = monster.id > 100;
-        card.className = `p-3 rounded-xl border flex flex-col items-center text-center transition ${isUnlocked ? 'bg-slate-900 border-slate-700 hover:border-amber-400' : 'bg-slate-950/60 border-slate-900 opacity-40'}`;
-
-        card.innerHTML = `
-          <div class="text-xs font-bold ${isUnlocked ? 'text-amber-400' : 'text-slate-600'}">
-            ${isEvo ? '究極神話' : 'No.' + String(monster.id).padStart(3, '0')}
-          </div>
-          <div class="text-4xl my-3 text-amber-300 ${isUnlocked ? '' : 'filter brightness-0'}"><i class="fa-solid ${monster.faIcon}"></i></div>
-          <div class="font-bold text-sm text-slate-100">${isUnlocked ? monster.name : '???'}</div>
-          <div class="text-[10px] text-slate-400 mt-1">${isUnlocked ? monster.desc : '尚未發現此幻獸'}</div>
-          ${isUnlocked ? `<div class="mt-2 text-xs font-black text-rose-400">ATK ${monster.baseAtk} ｜ HP ${monster.baseHp}</div>` : ''}
-        `;
-        container.appendChild(card);
-      });
-
-      document.getElementById('codex-progress').innerText = `${unlockedCount}/${MONSTER_DB.length}`;
-    }
-  </script>
+  <!-- 引入獨立 JavaScript 主程式碼 -->
+  <script src="app.js"></script>
 </body>
 </html>
