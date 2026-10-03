@@ -163,9 +163,9 @@ function saveCurrentPlayerData() {
   }
   updateTopBar();
   updateHomeView();
+  updateNotificationBadges();
 }
 
-/* 核心登入與註冊入口 (修復點擊無反應的核心) */
 function handleAuth(isLoginMode) {
   const user = document.getElementById('login-username').value.trim();
   const pass = document.getElementById('login-password').value.trim();
@@ -232,7 +232,7 @@ function ensurePlayerSchema() {
   if (!player.claimedAchievements) player.claimedAchievements = [];
   if (!player.friends) player.friends = [];
   if (!player.friendRequests) player.friendRequests = [];
-  if (player.hasCompletedTutorial === undefined) player.hasCompletedTutorial = true;
+  if (player.hasCompletedTutorial === undefined) player.hasCompletedTutorial = false;
   player.friends = player.friends.filter(f => !String(f.id).startsWith("npc_"));
   if (!player.inventory) {
     player.inventory = { upgradeStone: 5, grass_stone: 1, fire_stone: 1, water_stone: 1, void_stone: 0 };
@@ -266,6 +266,7 @@ function startStaminaTimer() {
     calculateStaminaRecovery();
     updateTopBar();
     updateHomeView();
+    updateNotificationBadges();
   }, 1000);
 }
 
@@ -277,6 +278,7 @@ function enterGameWorld() {
   startStaminaTimer();
   switchTab('home');
   checkAndShowTutorial();
+  updateNotificationBadges();
 }
 
 function handleLogout() {
@@ -343,7 +345,43 @@ function updateHomeView() {
   }
 }
 
-/* ================= 9. 新手教學控制 ================= */
+/* ================= 9. 紅色圓點通知徽章系統 ================= */
+function updateNotificationBadges() {
+  if (!player) return;
+
+  // 1. 檢查是否有未領取的成就
+  const hasClaimableAchievement = ACHIEVEMENTS_DB.some(ach => {
+    return ach.check(player) && !player.claimedAchievements.includes(ach.id);
+  });
+
+  // 2. 檢查是否有待審核的好友申請
+  const hasPendingFriendRequests = (player.friendRequests || []).length > 0;
+
+  // 更新下拉選單內的個別紅點
+  const achBadge = document.getElementById('achievements-badge');
+  if (achBadge) {
+    if (hasClaimableAchievement) achBadge.classList.remove('hidden');
+    else achBadge.classList.add('hidden');
+  }
+
+  const frBadge = document.getElementById('friends-badge');
+  if (frBadge) {
+    if (hasPendingFriendRequests) frBadge.classList.remove('hidden');
+    else frBadge.classList.add('hidden');
+  }
+
+  // 頂部選單按鈕的總紅點通知
+  const menuBadge = document.getElementById('menu-badge');
+  if (menuBadge) {
+    if (hasClaimableAchievement || hasPendingFriendRequests) {
+      menuBadge.classList.remove('hidden');
+    } else {
+      menuBadge.classList.add('hidden');
+    }
+  }
+}
+
+/* ================= 10. 新手教學控制 ================= */
 function checkAndShowTutorial() {
   if (player && !player.hasCompletedTutorial) {
     currentTutorialStep = 0;
@@ -383,9 +421,9 @@ function nextTutorialStep() {
   }
 }
 
-/* ================= 10. 選單與分頁導覽 ================= */
+/* ================= 11. 選單與分頁導覽 (防冒泡修復) ================= */
 function toggleDropdownMenu(e) {
-  e.stopPropagation();
+  if (e) e.stopPropagation();
   const menu = document.getElementById('dropdown-menu');
   menu.classList.toggle('hidden');
 }
@@ -394,6 +432,15 @@ function closeDropdownMenu(e) {
   const menu = document.getElementById('dropdown-menu');
   if (menu && !menu.classList.contains('hidden')) {
     menu.classList.add('hidden');
+  }
+}
+
+// 阻止事件冒泡確保選單內按鈕確實執行
+function handleMenuClick(e, callback) {
+  if (e) e.stopPropagation();
+  closeDropdownMenu();
+  if (typeof callback === 'function') {
+    callback();
   }
 }
 
@@ -418,7 +465,7 @@ function switchTab(tabId) {
   if (tabId === 'deck') renderDeckView();
 }
 
-/* ================= 11. 個人檔案、稱號與好友 ================= */
+/* ================= 12. 個人檔案、稱號與好友 ================= */
 function openProfileModal() {
   document.getElementById('profile-my-id').innerText = player.id || "#8888";
   document.getElementById('profile-input-name').value = player.name;
@@ -469,8 +516,6 @@ function renderTitlesList() {
 }
 
 function openFriendsModal() {
-  const menu = document.getElementById('dropdown-menu');
-  if (menu) menu.classList.add('hidden');
   renderFriendRequests();
   renderFriendsList();
   document.getElementById('modal-friends').classList.remove('hidden');
@@ -607,10 +652,15 @@ function sendFriendGift(idx) {
   alert(`已贈予好友禮物！好友回贈 50 金幣！`);
 }
 
-/* ================= 12. 成就系統 ================= */
+function openGuideModal() {
+  document.getElementById('modal-guide').classList.remove('hidden');
+}
+function closeGuideModal() {
+  document.getElementById('modal-guide').classList.add('hidden');
+}
+
+/* ================= 13. 成就系統 ================= */
 function openAchievementsModal() {
-  const menu = document.getElementById('dropdown-menu');
-  if (menu) menu.classList.add('hidden');
   switchAchievementTab(false);
   document.getElementById('modal-achievements').classList.remove('hidden');
 }
@@ -648,7 +698,7 @@ function switchAchievementTab(showCompleted) {
     const isClaimed = player.claimedAchievements.includes(ach.id);
 
     const card = document.createElement('div');
-    card.className = `p-3 rounded-xl border flex items-center justify-between ${isClaimed ? 'bg-slate-950/40 border-slate-800 opacity-60' : isDone ? 'bg-slate-800/90 border-amber-500/80' : 'bg-slate-900 border-slate-800'}`;
+    card.className = `p-3 rounded-xl border flex items-center justify-between ${isClaimed ? 'bg-slate-950/40 border-slate-800 opacity-60' : isDone ? 'bg-slate-800/90 border-amber-500/80 shadow-md' : 'bg-slate-900 border-slate-800'}`;
 
     card.innerHTML = `
       <div>
@@ -663,7 +713,7 @@ function switchAchievementTab(showCompleted) {
         ${isClaimed 
           ? '<span class="text-[11px] text-slate-500 font-bold whitespace-nowrap">已領取</span>' 
           : isDone 
-            ? `<button onclick="claimAchievement('${ach.id}')" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black rounded-lg shadow-md active:scale-95 whitespace-nowrap">領取</button>`
+            ? `<button onclick="claimAchievement('${ach.id}')" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black rounded-lg shadow-md active:scale-95 whitespace-nowrap flex items-center gap-1"><span>領取</span><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span></button>`
             : '<span class="text-[11px] text-slate-600 font-bold whitespace-nowrap">未達成</span>'}
       </div>
     `;
@@ -688,11 +738,8 @@ function claimAchievement(achId) {
   switchAchievementTab(isShowingCompletedAchievements);
 }
 
-/* ================= 13. 格子背包 (Item Grid) ================= */
+/* ================= 14. 格子背包 (Item Grid) ================= */
 function openInventoryModal() {
-  const menu = document.getElementById('dropdown-menu');
-  if (menu) menu.classList.add('hidden');
-
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
 
@@ -735,7 +782,7 @@ function openItemDetail(itemKey) {
 }
 function closeItemDetailModal() { document.getElementById('modal-item-detail').classList.add('hidden'); }
 
-/* ================= 14. 卡牌數值與升級進化 ================= */
+/* ================= 15. 卡牌數值與升級進化 ================= */
 function getMonsterStats(id) {
   const monster = MONSTER_DB.find(m => m.id === id);
   const level = (player && player.cardLevels && player.cardLevels[id]) || 1;
@@ -836,7 +883,7 @@ function executeEvolveCard() {
   closeUpgradeModal();
 }
 
-/* ================= 15. 戰鬥核心引擎 ================= */
+/* ================= 16. 戰鬥核心引擎 ================= */
 function renderStages() {
   const container = document.getElementById('stages-container');
   container.innerHTML = '';
@@ -868,7 +915,7 @@ function renderStages() {
         </div>
         <button onclick="startBattle(${stage.id})" ${isLocked ? 'disabled' : ''} 
                 class="px-4 py-1.5 rounded-lg text-xs font-black whitespace-nowrap ${isLocked ? 'bg-slate-800 text-slate-600' : 'bg-amber-500 hover:bg-amber-400 text-slate-950'} transition active:scale-95">
-          ${isLocked ? '未解鎖' : '出征'}
+              ${isLocked ? '未解鎖' : '出征'}
         </button>
       </div>
     `;
@@ -1364,7 +1411,7 @@ function exitBattle() {
   switchTab('stages');
 }
 
-/* ================= 16. 牌組配置 ================= */
+/* ================= 17. 牌組配置 ================= */
 function renderDeckView() {
   player.deck = [...new Set(player.deck)];
   document.getElementById('deck-count').innerText = player.deck.length;
@@ -1435,7 +1482,7 @@ function autoFillDeck() {
   renderDeckView();
 }
 
-/* ================= 17. 召喚祭壇與圖鑑 (包含嚴格重複補償) ================= */
+/* ================= 18. 召喚祭壇與圖鑑 (包含嚴格重複補償) ================= */
 function drawGacha(times) {
   const cost = times === 1 ? 100 : 900;
   if (player.gold < cost) { alert("金幣不足！快去戰役關卡獲取賞金！"); return; }
@@ -1558,12 +1605,13 @@ function renderCodex() {
   document.getElementById('codex-progress').innerText = `${unlockedCount}/${MONSTER_DB.length}`;
 }
 
-/* ================= 18. 全域掛載保證 onclick 100% 能找到函式 ================= */
+/* ================= 19. 全域掛載保證 ================= */
 window.handleAuth = handleAuth;
 window.handleLogout = handleLogout;
 window.switchTab = switchTab;
 window.toggleDropdownMenu = toggleDropdownMenu;
 window.closeDropdownMenu = closeDropdownMenu;
+window.handleMenuClick = handleMenuClick;
 window.openProfileModal = openProfileModal;
 window.closeProfileModal = closeProfileModal;
 window.saveProfileName = saveProfileName;
