@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>幻獸啟示錄：卡牌對決</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,9 +13,10 @@
     
     body {
       font-family: 'Noto Sans TC', sans-serif;
-      background-color: #0b0f19;
+      background-color: #080b14;
       color: #f3f4f6;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .title-font {
@@ -24,72 +25,66 @@
 
     /* 稀有度光芒特效 */
     .glow-ssr {
-      box-shadow: 0 0 15px rgba(234, 179, 8, 0.6), inset 0 0 10px rgba(234, 179, 8, 0.4);
+      box-shadow: 0 0 15px rgba(234, 179, 8, 0.7);
       border-color: #eab308 !important;
     }
     .glow-sr {
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.5), inset 0 0 8px rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
       border-color: #a855f7 !important;
     }
     .glow-r {
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
       border-color: #3b82f6 !important;
     }
     .glow-n {
-      border-color: #6b7280 !important;
+      border-color: #64748b !important;
     }
 
-    /* 可攻擊高亮呼吸燈 */
+    /* 可出牌或可攻擊的高亮呼吸燈 */
+    .playable-card {
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+      border-color: #38bdf8 !important;
+      transform: translateY(-4px);
+    }
     .ready-to-attack {
-      box-shadow: 0 0 15px #10b981, inset 0 0 8px #10b981;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.85);
       border-color: #34d399 !important;
       cursor: pointer;
-      animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      animation: pulse-border 1.5s infinite;
     }
-
-    /* 被選中者特效 */
     .card-selected {
       transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 0 20px #f59e0b, inset 0 0 12px #f59e0b;
+      box-shadow: 0 0 22px rgba(245, 158, 11, 0.9);
       border-color: #fbbf24 !important;
     }
-
-    /* 可作為目標的敵方怪獸提示 */
     .valid-target {
-      box-shadow: 0 0 12px #ef4444;
-      border-color: #f87171 !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.9);
+      border-color: #ef4444 !important;
+      animation: pulse-border 1.2s infinite;
       cursor: crosshair;
     }
 
-    @keyframes pulse-ring {
+    @keyframes pulse-border {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
+      50% { opacity: 0.65; }
     }
 
-    /* 衝刺撞擊動畫 (我方向上衝) */
-    .anim-dash-up {
-      animation: dashUp 0.35s ease-in-out;
-    }
+    /* 衝刺與撞擊 */
+    .anim-dash-up { animation: dashUp 0.3s ease-in-out; }
     @keyframes dashUp {
       0% { transform: translateY(0); }
-      50% { transform: translateY(-70px) scale(1.15); }
+      50% { transform: translateY(-60px) scale(1.15); }
       100% { transform: translateY(0); }
     }
 
-    /* 敵方向下衝 */
-    .anim-dash-down {
-      animation: dashDown 0.35s ease-in-out;
-    }
+    .anim-dash-down { animation: dashDown 0.3s ease-in-out; }
     @keyframes dashDown {
       0% { transform: translateY(0); }
-      50% { transform: translateY(70px) scale(1.15); }
+      50% { transform: translateY(60px) scale(1.15); }
       100% { transform: translateY(0); }
     }
 
-    /* 受擊抖動動畫 */
-    .anim-shake {
-      animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
-    }
+    .anim-shake { animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both; }
     @keyframes shake {
       10%, 90% { transform: translate3d(-3px, 0, 0); }
       20%, 80% { transform: translate3d(4px, 0, 0); }
@@ -97,7 +92,7 @@
       40%, 60% { transform: translate3d(6px, 0, 0); }
     }
 
-    /* 傷害飄字動畫 */
+    /* 傷害飄字 */
     @keyframes floatUp {
       0% { opacity: 0; transform: translateY(0) scale(0.6); }
       30% { opacity: 1; transform: translateY(-20px) scale(1.3); }
@@ -112,32 +107,24 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.9);
     }
 
-    /* 旋轉動畫 */
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .spin-slow {
-      animation: spin-slow 12s linear infinite;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-  <!-- ================= 頂部狀態欄 ================= -->
-  <header id="top-bar" class="hidden h-14 bg-slate-900/90 border-b border-slate-700/80 px-4 md:px-8 flex items-center justify-between z-30 shadow-lg">
-    <div class="flex items-center gap-3">
-      <div id="user-avatar" class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white border border-indigo-400">召</div>
+  <!-- ================= 頂部狀態欄（點擊頭像/暱稱可編輯個人資料） ================= -->
+  <header id="top-bar" class="hidden h-14 bg-slate-900/95 border-b border-slate-800 px-4 md:px-8 flex items-center justify-between z-30 shadow-lg">
+    <!-- 個人資料入口 (可點擊修改名字) -->
+    <div onclick="openProfileModal()" class="flex items-center gap-3 cursor-pointer p-1.5 rounded-xl hover:bg-slate-800/80 transition active:scale-95" title="點擊修改個人名號">
+      <div id="user-avatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center font-bold text-white border border-amber-400 shadow-md">
+        召
+      </div>
       <div>
-        <div id="user-name-display" class="font-bold text-sm text-amber-300">冒險者</div>
+        <div class="flex items-center gap-1.5">
+          <span id="user-name-display" class="font-bold text-sm text-amber-300">冒險者</span>
+          <i class="fa-solid fa-pen-to-square text-[10px] text-slate-400"></i>
+        </div>
         <div class="text-[10px] text-slate-400">等級 <span id="user-level">1</span></div>
       </div>
     </div>
@@ -152,7 +139,7 @@
         <i class="fa-solid fa-gem text-sky-400"></i>
         <span id="gem-display" class="text-sky-200">100</span>
       </div>
-      <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs px-2 py-1 transition" title="登出">
+      <button onclick="handleLogout()" class="text-slate-400 hover:text-rose-400 text-xs px-2 py-1 transition" title="登出當前帳號">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
@@ -161,33 +148,43 @@
   <!-- ================= 主要視圖容器 ================= -->
   <main id="main-container" class="flex-1 relative overflow-hidden">
 
-    <!-- 1. 登入畫面 -->
+    <!-- 1. 帳號密碼登入 / 註冊畫面 -->
     <section id="view-login" class="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-4">
-      <div class="max-w-md w-full bg-slate-900/80 border border-slate-700 p-8 rounded-2xl shadow-2xl backdrop-blur-md text-center">
-        <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+      <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 p-8 rounded-2xl shadow-2xl backdrop-blur-md text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
           <i class="fa-solid fa-dragon text-3xl text-white"></i>
         </div>
         <h1 class="title-font text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500 mb-1">幻獸啟示錄</h1>
-        <p class="text-xs text-slate-400 tracking-widest uppercase mb-6">Chronicles of Monster Duel</p>
-        
+        <p class="text-[11px] text-slate-400 tracking-widest uppercase mb-6">Chronicles of Monster Duel</p>
+
         <div class="space-y-4 text-left">
           <div>
-            <label class="block text-xs font-bold text-slate-300 mb-1">召喚師名號</label>
-            <input type="text" id="login-input-name" placeholder="輸入你的稱號..." value="傳奇召喚師" 
-                   class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400">
+            <label class="block text-xs font-bold text-slate-300 mb-1">冒險者帳號</label>
+            <input type="text" id="login-username" placeholder="請輸入帳號 (例如: player01)" 
+                   class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 text-sm">
           </div>
-          <button onclick="handleLogin()" class="w-full py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black tracking-wider text-base shadow-lg shadow-amber-500/20 active:scale-95 transition">
-            踏上冒險旅程
-          </button>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">登入密碼</label>
+            <input type="password" id="login-password" placeholder="請輸入密碼" 
+                   class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 text-sm">
+          </div>
+          <div class="flex gap-3 pt-2">
+            <button onclick="handleAuth(false)" class="flex-1 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-sm border border-slate-600 transition active:scale-95">
+              註冊新帳號
+            </button>
+            <button onclick="handleAuth(true)" class="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg transition active:scale-95">
+              登入冒險
+            </button>
+          </div>
         </div>
-        
-        <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
-          <i class="fa-solid fa-cloud-arrow-down mr-1"></i> 進度自動儲存於本機瀏覽器 (支援隨開即玩)
+
+        <div class="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-500">
+          帳號存檔均安全保存在本機裝置，更換裝置或清除快取前請注意
         </div>
       </div>
     </section>
 
-    <!-- 2. 關卡地圖 (冒險首頁) -->
+    <!-- 2. 冒險關卡章節視圖 -->
     <section id="view-stages" class="hidden h-full w-full overflow-y-auto p-4 md:p-8 no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-6">
         <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -195,22 +192,21 @@
             <h2 class="text-2xl font-black text-amber-400 flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot"></i> 戰役章節
             </h2>
-            <p class="text-xs text-slate-400">點選目標敵方怪獸發動精準打擊，消滅全部可動怪獸後自動換回回合！</p>
+            <p class="text-xs text-slate-400">消滅首領推進章節。所有戰力已為你優化，無縫對決！</p>
           </div>
         </div>
 
-        <!-- 關卡列表容器 -->
         <div id="stages-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- 動態載入關卡卡片 -->
+          <!-- 關卡清單動態生成 -->
         </div>
       </div>
     </section>
 
-    <!-- 3. 對戰場視圖 (關卡內部戰鬥) -->
+    <!-- 3. 對戰場視圖 (乾淨整潔，無醜橫條) -->
     <section id="view-battle" class="hidden h-full w-full flex flex-col justify-between bg-slate-950 relative overflow-hidden select-none">
       <!-- 敵方半場 -->
       <div class="h-[43%] bg-slate-900/40 border-b border-slate-800/80 p-3 flex flex-col justify-between relative">
-        <!-- 敵方召喚師狀態 (可點擊攻擊) -->
+        <!-- 敵方召喚師狀態 -->
         <div class="flex items-center justify-between">
           <div id="enemy-hero-box" onclick="handleTargetBoss()" class="flex items-center gap-3 p-1.5 rounded-xl transition duration-200 cursor-pointer">
             <div id="enemy-avatar" class="w-12 h-12 rounded-xl bg-rose-950 border-2 border-rose-500 flex items-center justify-center text-xl shadow-lg relative">
@@ -221,7 +217,6 @@
                 <span id="enemy-name" class="font-bold text-rose-300">關卡首領</span>
                 <span id="enemy-target-hint" class="text-[10px] px-2 py-0.5 rounded bg-rose-900/50 text-rose-200 border border-rose-700">目標Boss</span>
               </div>
-              <!-- 敵方血條 -->
               <div class="w-48 md:w-64 bg-slate-800 h-4 rounded-full overflow-hidden border border-slate-700 relative mt-1">
                 <div id="enemy-hp-bar" class="h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all duration-300" style="width: 100%;"></div>
                 <span id="enemy-hp-text" class="absolute inset-0 text-[10px] font-black flex items-center justify-center text-white drop-shadow">80 / 80</span>
@@ -234,33 +229,27 @@
           </div>
         </div>
 
-        <!-- 敵方戰鬥場地怪獸區 -->
+        <!-- 敵方怪獸戰場 -->
         <div id="enemy-board" class="flex justify-center items-center gap-3 md:gap-6 py-1">
-          <!-- 敵方怪物動態生成 -->
+          <!-- 敵方怪獸槽位 -->
         </div>
       </div>
 
-      <!-- 中場狀態通知廣播 & 提示 -->
+      <!-- 中場狀態通知廣播 (大字提示，隨後自動消失) -->
       <div id="battle-announcer" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none text-center hidden">
         <div id="announcer-text" class="text-2xl md:text-4xl font-black text-amber-300 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] animate-bounce">
           你的回合
         </div>
       </div>
 
-      <!-- 操作指南橫條 -->
-      <div id="turn-guide-bar" class="bg-indigo-950/80 border-y border-indigo-500/30 py-1 text-center text-xs font-bold text-indigo-300 z-10 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-crosshairs text-amber-400"></i>
-        <span id="guide-text">點擊綠框怪獸發動攻擊，全員行動完畢將「自動結束回合」</span>
-      </div>
-
       <!-- 我方半場 -->
-      <div class="h-[52%] bg-slate-900/70 p-3 flex flex-col justify-between relative">
-        <!-- 我方場地怪獸區 -->
+      <div class="h-[57%] bg-slate-900/70 p-3 flex flex-col justify-between relative">
+        <!-- 我方怪獸戰場 -->
         <div id="player-board" class="flex justify-center items-center gap-3 md:gap-6 py-1">
-          <!-- 我方怪物動態生成 -->
+          <!-- 我方怪獸槽位 -->
         </div>
 
-        <!-- 我方玩家控制列 -->
+        <!-- 我方玩家控制與水晶 -->
         <div class="flex items-center justify-between border-t border-slate-800/80 pt-1.5">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-indigo-950 border-2 border-indigo-500 flex items-center justify-center text-lg shadow-lg">
@@ -268,7 +257,6 @@
             </div>
             <div>
               <div class="text-xs text-slate-300 font-bold" id="battle-player-name">冒險者</div>
-              <!-- 我方血條 -->
               <div class="w-44 md:w-56 bg-slate-800 h-3.5 rounded-full overflow-hidden border border-slate-700 relative mt-0.5">
                 <div id="player-hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-300" style="width: 100%;"></div>
                 <span id="player-hp-text" class="absolute inset-0 text-[10px] font-black flex items-center justify-center text-white drop-shadow">80 / 80</span>
@@ -279,17 +267,11 @@
           <!-- 水晶魔力槽 -->
           <div class="flex flex-col items-center">
             <div class="text-[11px] font-bold text-sky-400 flex items-center gap-1">
-              <i class="fa-solid fa-bolt"></i> 魔力水晶 <span id="player-mana-text">1/1</span>
+              <i class="fa-solid fa-bolt"></i> 魔力水晶 <span id="player-mana-text">2/2</span>
             </div>
             <div id="mana-crystals" class="flex gap-1 mt-0.5">
-              <!-- 動態生成水晶點 -->
+              <!-- 動態水晶點 -->
             </div>
-          </div>
-
-          <!-- 自動回合狀態燈 -->
-          <div class="flex items-center gap-1.5 text-xs text-slate-400 font-semibold bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700">
-            <span id="turn-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span id="turn-indicator-text" class="text-emerald-300">我方回合</span>
           </div>
         </div>
 
@@ -305,11 +287,10 @@
       <div class="max-w-3xl mx-auto text-center space-y-6">
         <div>
           <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400">遠古幻獸召喚陣</h2>
-          <p class="text-xs text-slate-400 mt-1">消耗金幣獲取強大幻獸，SSR 稀有怪獸概率提升中！</p>
+          <p class="text-xs text-slate-400 mt-1">消耗金幣召喚幻獸，全圖鑑收集與解鎖唯一卡牌！</p>
         </div>
 
         <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
-          <div class="absolute inset-0 rounded-full border-4 border-dashed border-amber-500/40 spin-slow"></div>
           <div class="w-36 h-36 rounded-full bg-gradient-to-br from-indigo-900 to-purple-950 border-2 border-amber-400 flex items-center justify-center shadow-[0_0_30px_rgba(234,179,8,0.3)]">
             <i class="fa-solid fa-gem text-5xl text-amber-300 animate-pulse"></i>
           </div>
@@ -326,7 +307,7 @@
 
         <div class="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-lg border border-slate-800 max-w-md mx-auto">
           機率公示：SSR (5%) ｜ SR (15%) ｜ R (35%) ｜ N (45%)<br>
-          <span class="text-amber-400">※ 十連召喚必得一張 R 級以上幻獸！</span>
+          <span class="text-amber-400">※ 十連必得 R 級以上！獲得已擁有的怪獸將轉換為 50 金幣回饋！</span>
         </div>
       </div>
     </section>
@@ -344,32 +325,29 @@
         </div>
 
         <div id="codex-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          <!-- 圖鑑怪獸動態生成 -->
         </div>
       </div>
     </section>
 
-    <!-- 6. 牌組配置視圖 -->
+    <!-- 6. 牌組配置視圖 (嚴格唯一性防呆) -->
     <section id="view-deck" class="hidden h-full w-full p-4 md:p-8 overflow-y-auto no-scrollbar">
       <div class="max-w-4xl mx-auto space-y-4">
         <div class="flex justify-between items-center border-b border-slate-800 pb-3">
           <div>
             <h2 class="text-2xl font-black text-amber-400">出征牌組管理</h2>
-            <p class="text-xs text-slate-400">請配置 <span class="text-emerald-400 font-bold">8 張</span> 戰鬥出征卡牌</p>
+            <p class="text-xs text-slate-400">請挑選 <span class="text-emerald-400 font-bold">4 ~ 6 張「不重複」</span> 的獨特幻獸出征</p>
           </div>
           <button onclick="autoFillDeck()" class="px-3 py-1.5 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-xs font-bold transition">
-            一鍵配置最強戰力
+            一鍵組建最強陣容
           </button>
         </div>
 
-        <div class="text-xs font-bold text-slate-400">已裝備卡牌 (<span id="deck-count">0</span>/8)：</div>
-        <div id="deck-active-list" class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800 min-h-[140px]">
-          <!-- 當前裝備的 8 張卡 -->
+        <div class="text-xs font-bold text-slate-300">出征陣容（已裝備 <span id="deck-count" class="text-amber-400 font-bold">0</span>/6）：</div>
+        <div id="deck-active-list" class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800 min-h-[120px]">
         </div>
 
-        <div class="text-xs font-bold text-slate-400 pt-2">我的收藏庫 (點擊替換入隊)：</div>
+        <div class="text-xs font-bold text-slate-400 pt-2">我的收藏庫 (點擊加入陣容，已上陣不可重複)：</div>
         <div id="deck-pool-list" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
-          <!-- 玩家擁有的所有卡牌 -->
         </div>
       </div>
     </section>
@@ -392,12 +370,46 @@
     </button>
   </nav>
 
+  <!-- ================= 彈窗層：個人資料編輯彈窗 ================= -->
+  <div id="modal-profile" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
+    <div class="max-w-xs w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
+      <h3 class="text-lg font-black text-amber-400 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-id-card"></i> 召喚師名冊
+      </h3>
+      <div>
+        <label class="block text-xs font-bold text-slate-400 text-left mb-1">修改名號</label>
+        <input type="text" id="profile-input-name" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-400">
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeProfileModal()" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg transition">
+          取消
+        </button>
+        <button onclick="saveProfileName()" class="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-lg transition">
+          儲存修改
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗層：初次遊玩設定暱稱彈窗 ================= -->
+  <div id="modal-first-name" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden">
+    <div class="max-w-sm w-full bg-slate-900 border-2 border-amber-500/80 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
+      <div class="text-4xl">📜</div>
+      <h3 class="text-xl font-black text-amber-400">締結遠古契約</h3>
+      <p class="text-xs text-slate-300 leading-relaxed">初次抵達幻獸大陸的冒險者，請立下你在這片大陸上的傳奇名號！</p>
+      <input type="text" id="first-input-name" placeholder="輸入名號 (例如: 晨曦法師)" 
+             class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-400 text-center font-bold">
+      <button onclick="confirmFirstLoginName()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black rounded-lg transition">
+        啟程出發
+      </button>
+    </div>
+  </div>
+
   <!-- ================= 彈窗層：抽卡結果彈窗 ================= -->
   <div id="modal-gacha-result" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 hidden">
     <div class="max-w-2xl w-full bg-slate-900 border border-amber-500/50 p-6 rounded-2xl text-center space-y-4 shadow-2xl">
       <h3 class="text-xl font-black text-amber-400">召喚結果</h3>
-      <div id="gacha-cards-container" class="grid grid-cols-2 sm:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto p-2 no-scrollbar">
-      </div>
+      <div id="gacha-cards-container" class="grid grid-cols-2 sm:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto p-2 no-scrollbar"></div>
       <button onclick="closeGachaModal()" class="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">
         收下幻獸
       </button>
@@ -410,10 +422,9 @@
       <div id="battle-result-icon" class="text-5xl">🏆</div>
       <h3 id="battle-result-title" class="text-2xl font-black text-amber-400">戰鬥勝利！</h3>
       <p id="battle-result-desc" class="text-xs text-slate-300">成功討伐首領，獲得豐厚獎勵！</p>
-      <div id="battle-rewards" class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-sm font-bold text-amber-300 space-y-1">
-      </div>
+      <div id="battle-rewards" class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-sm font-bold text-amber-300 space-y-1"></div>
       <button onclick="exitBattle()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-lg transition">
-        返回關卡列表
+        返回戰役地圖
       </button>
     </div>
   </div>
@@ -435,7 +446,7 @@
       { id: 11, name: "起源白晝鹿", rarity: "SSR", element: "light", cost: 6, atk: 40, hp: 75, desc: "每回合開始恢復主角 15 點生命", icon: "✨" }
     ];
 
-    /* ================= 2. 戰役關卡資料庫 ================= */
+    /* ================= 2. 關卡資料庫 ================= */
     const STAGES_DB = [
       {
         id: 1,
@@ -443,10 +454,10 @@
         desc: "野生草系與水系小怪出沒的溫暖樹林。",
         bossName: "森林巨蜂王",
         bossElement: "grass",
-        bossHp: 80,
+        bossHp: 70,
         bossIcon: "🐝",
         rewardGold: 200,
-        deck: [1, 1, 3, 3, 4]
+        deck: [1, 3, 4]
       },
       {
         id: 2,
@@ -454,10 +465,10 @@
         desc: "熔岩沸騰的赤熱地帶，火系怪獸攻勢兇猛！",
         bossName: "熔岩魔石像",
         bossElement: "fire",
-        bossHp: 120,
+        bossHp: 110,
         bossIcon: "👹",
         rewardGold: 350,
-        deck: [2, 2, 5, 5, 8]
+        deck: [2, 5, 8]
       },
       {
         id: 3,
@@ -465,10 +476,10 @@
         desc: "極度幽暗的深海，巨大的水系巨獸在此沉睡。",
         bossName: "幻海利維坦",
         bossElement: "water",
-        bossHp: 160,
+        bossHp: 150,
         bossIcon: "🐙",
         rewardGold: 500,
-        deck: [3, 6, 6, 9, 9]
+        deck: [3, 6, 9]
       },
       {
         id: 4,
@@ -476,25 +487,162 @@
         desc: "虛空裂隙打開之地，迎戰傳說神話生物！",
         bossName: "混沌終焉核心",
         bossElement: "void",
-        bossHp: 220,
+        bossHp: 200,
         bossIcon: "👁️",
         rewardGold: 1000,
         deck: [7, 8, 9, 10, 11]
       }
     ];
 
-    /* ================= 3. 玩家資料結構 ================= */
-    let player = {
-      name: "傳奇召喚師",
-      level: 1,
-      gold: 1000,
-      gems: 100,
-      clearedStages: 0,
-      collection: [1, 2, 3, 4, 5],
-      deck: [1, 2, 3, 4, 5, 1, 2, 3]
-    };
+    /* ================= 3. 帳號與玩家狀態 ================= */
+    let currentAccount = null; // 當前登入的使用者帳號
+    let player = null;
 
-    /* ================= 4. 戰鬥即時狀態 ================= */
+    // 取得所有本地帳號資料庫
+    function getAllAccounts() {
+      const data = localStorage.getItem('monster_game_accounts');
+      return data ? JSON.parse(data) : {};
+    }
+
+    function saveAllAccounts(accounts) {
+      localStorage.setItem('monster_game_accounts', JSON.stringify(accounts));
+    }
+
+    function saveCurrentPlayerData() {
+      if (!currentAccount || !player) return;
+      const accounts = getAllAccounts();
+      if (accounts[currentAccount]) {
+        accounts[currentAccount].playerData = player;
+        saveAllAccounts(accounts);
+      }
+      updateTopBar();
+    }
+
+    /* 處理帳號登入與註冊 */
+    function handleAuth(isLoginMode) {
+      const user = document.getElementById('login-username').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+
+      if (!user || !pass) {
+        alert("請輸入冒險者帳號與密碼！");
+        return;
+      }
+
+      const accounts = getAllAccounts();
+
+      if (isLoginMode) {
+        // 登入驗證
+        if (!accounts[user] || accounts[user].password !== pass) {
+          alert("帳號不存在或密碼錯誤！若未註冊請點擊「註冊新帳號」");
+          return;
+        }
+        currentAccount = user;
+        player = accounts[user].playerData;
+
+        // 若尚未設定過名稱，彈窗設定
+        if (accounts[user].isFirstTime) {
+          showFirstNameModal();
+        } else {
+          enterGameWorld();
+        }
+      } else {
+        // 註冊流程
+        if (accounts[user]) {
+          alert("該帳號名稱已被註冊，請換一個或直接登入！");
+          return;
+        }
+        // 初始唯一卡牌庫：包含 1, 2, 3, 4, 5
+        const defaultDeck = [1, 2, 3, 4, 5]; // 嚴格不重複唯一
+        accounts[user] = {
+          password: pass,
+          isFirstTime: true,
+          playerData: {
+            name: "新星冒險者",
+            level: 1,
+            gold: 600,
+            gems: 100,
+            clearedStages: 0,
+            collection: [1, 2, 3, 4, 5], // 擁有卡片
+            deck: defaultDeck // 唯一陣容
+          }
+        };
+        saveAllAccounts(accounts);
+        currentAccount = user;
+        player = accounts[user].playerData;
+
+        showFirstNameModal();
+      }
+    }
+
+    function showFirstNameModal() {
+      document.getElementById('modal-first-name').classList.remove('hidden');
+    }
+
+    function confirmFirstLoginName() {
+      const name = document.getElementById('first-input-name').value.trim();
+      if (!name) {
+        alert("名號不能為空！");
+        return;
+      }
+      player.name = name;
+      const accounts = getAllAccounts();
+      if (accounts[currentAccount]) {
+        accounts[currentAccount].isFirstTime = false;
+        accounts[currentAccount].playerData = player;
+        saveAllAccounts(accounts);
+      }
+      document.getElementById('modal-first-name').classList.add('hidden');
+      enterGameWorld();
+    }
+
+    function enterGameWorld() {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('top-bar').classList.remove('hidden');
+      document.getElementById('bottom-nav').classList.remove('hidden');
+      updateTopBar();
+      switchTab('stages');
+    }
+
+    function handleLogout() {
+      currentAccount = null;
+      player = null;
+      document.getElementById('top-bar').classList.add('hidden');
+      document.getElementById('bottom-nav').classList.add('hidden');
+      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('view-login').classList.remove('hidden');
+    }
+
+    /* 個人資料修改彈窗 */
+    function openProfileModal() {
+      document.getElementById('profile-input-name').value = player.name;
+      document.getElementById('modal-profile').classList.remove('hidden');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('modal-profile').classList.add('hidden');
+    }
+
+    function saveProfileName() {
+      const newName = document.getElementById('profile-input-name').value.trim();
+      if (!newName) {
+        alert("名號不能為空！");
+        return;
+      }
+      player.name = newName;
+      saveCurrentPlayerData();
+      closeProfileModal();
+    }
+
+    function updateTopBar() {
+      if (!player) return;
+      document.getElementById('user-name-display').innerText = player.name;
+      document.getElementById('user-avatar').innerText = player.name.charAt(0) || "召";
+      document.getElementById('user-level').innerText = player.level;
+      document.getElementById('gold-display').innerText = player.gold;
+      document.getElementById('gem-display').innerText = player.gems;
+    }
+
+    /* ================= 4. 戰鬥核心引擎 ================= */
     let battleState = {
       activeStage: null,
       turn: 1,
@@ -503,59 +651,20 @@
       playerMaxHp: 80,
       enemyHp: 80,
       enemyMaxHp: 80,
-      playerMana: 1,
-      playerMaxMana: 1,
+      playerMana: 2, // 起始水晶調整為 2，開局絕不卡死
+      playerMaxMana: 2,
       playerHand: [],
       enemyHand: [],
       playerDeck: [],
       enemyDeck: [],
-      playerBoard: [], // [{..., uid, currentAtk, currentHp, hasAttacked: false}]
-      enemyBoard: [],  // [{..., uid, currentAtk, currentHp}]
-      selectedAttackerIndex: null, // 當前選中發動攻擊的怪獸索引
-      isAnimating: false // 動畫播放期間鎖定操作
+      playerBoard: [],
+      enemyBoard: [],
+      selectedAttackerIndex: null,
+      isAnimating: false,
+      autoTurnCheckTimer: null
     };
 
     let nextUid = 1;
-
-    function saveGame() {
-      localStorage.setItem('monster_duel_save', JSON.stringify(player));
-      updateTopBar();
-    }
-
-    function loadGame() {
-      const data = localStorage.getItem('monster_duel_save');
-      if (data) {
-        try {
-          player = { ...player, ...JSON.parse(data) };
-        } catch (e) {
-          console.error("存檔損壞");
-        }
-      }
-    }
-
-    function updateTopBar() {
-      document.getElementById('user-name-display').innerText = player.name;
-      document.getElementById('gold-display').innerText = player.gold;
-      document.getElementById('gem-display').innerText = player.gems;
-    }
-
-    function handleLogin() {
-      const nameInput = document.getElementById('login-input-name').value.trim();
-      if (nameInput) player.name = nameInput;
-      saveGame();
-
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('top-bar').classList.remove('hidden');
-      document.getElementById('bottom-nav').classList.remove('hidden');
-      switchTab('stages');
-    }
-
-    function logout() {
-      document.getElementById('top-bar').classList.add('hidden');
-      document.getElementById('bottom-nav').classList.add('hidden');
-      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-      document.getElementById('view-login').classList.remove('hidden');
-    }
 
     function switchTab(tabId) {
       document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
@@ -577,7 +686,6 @@
       if (tabId === 'deck') renderDeckView();
     }
 
-    /* ================= 戰役關卡邏輯 ================= */
     function renderStages() {
       const container = document.getElementById('stages-container');
       container.innerHTML = '';
@@ -586,9 +694,7 @@
         const isLocked = idx > player.clearedStages;
         const card = document.createElement('div');
         card.className = `p-5 rounded-2xl border transition-all ${
-          isLocked 
-            ? 'bg-slate-900/40 border-slate-800 opacity-60' 
-            : 'bg-slate-900/90 border-slate-700 hover:border-amber-500/80 shadow-xl'
+          isLocked ? 'bg-slate-900/40 border-slate-800 opacity-60' : 'bg-slate-900/90 border-slate-700 hover:border-amber-500/80 shadow-xl'
         }`;
 
         card.innerHTML = `
@@ -619,7 +725,6 @@
       });
     }
 
-    /* ================= 戰鬥核心引擎 ================= */
     function startBattle(stageId) {
       const stage = STAGES_DB.find(s => s.id === stageId);
       if (!stage) return;
@@ -631,19 +736,26 @@
       battleState.playerMaxHp = 80;
       battleState.enemyHp = stage.bossHp;
       battleState.enemyMaxHp = stage.bossHp;
-      battleState.playerMana = 1;
-      battleState.playerMaxMana = 1;
+      battleState.playerMana = 2; // 起始魔力 2
+      battleState.playerMaxMana = 2;
       battleState.selectedAttackerIndex = null;
       battleState.isAnimating = false;
 
+      // 洗牌建立牌庫 (保證手牌每張都是唯一的怪獸實體)
       battleState.playerDeck = shuffle([...player.deck.map(id => ({ ...MONSTER_DB.find(m => m.id === id) }))]);
       battleState.enemyDeck = shuffle([...stage.deck.map(id => ({ ...MONSTER_DB.find(m => m.id === id) }))]);
       battleState.playerBoard = [];
       battleState.enemyBoard = [];
 
-      // 雙方各抽 3 張牌
+      // 起始抽 3 張牌
       battleState.playerHand = [battleState.playerDeck.pop(), battleState.playerDeck.pop(), battleState.playerDeck.pop()].filter(Boolean);
       battleState.enemyHand = [battleState.enemyDeck.pop(), battleState.enemyDeck.pop(), battleState.enemyDeck.pop()].filter(Boolean);
+
+      // 開局防卡死：若手牌全大於 2 費，抽換一張低費怪獸確保第 1 回合絕對能出牌
+      if (battleState.playerHand.every(c => c.cost > 2)) {
+        const cheapMonster = MONSTER_DB.find(m => m.cost <= 2 && player.deck.includes(m.id)) || MONSTER_DB[0];
+        battleState.playerHand[0] = { ...cheapMonster };
+      }
 
       document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
       document.getElementById('view-battle').classList.remove('hidden');
@@ -666,10 +778,9 @@
       const txt = document.getElementById('announcer-text');
       txt.innerText = text;
       el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('hidden'), 1100);
+      setTimeout(() => el.classList.add('hidden'), 900);
     }
 
-    /* 浮動傷害跳字特效 */
     function showFloatingDamage(targetElement, amount, isCritical = false) {
       if (!targetElement) return;
       const rect = targetElement.getBoundingClientRect();
@@ -686,7 +797,7 @@
     }
 
     function updateBattleUI() {
-      // 玩家與敵方血條更新
+      // 血條更新
       const pPct = Math.max(0, (battleState.playerHp / battleState.playerMaxHp) * 100);
       const ePct = Math.max(0, (battleState.enemyHp / battleState.enemyMaxHp) * 100);
       document.getElementById('player-hp-bar').style.width = pPct + '%';
@@ -704,20 +815,7 @@
         crystalContainer.appendChild(dot);
       }
 
-      // 回合狀態指示器
-      const dot = document.getElementById('turn-indicator-dot');
-      const text = document.getElementById('turn-indicator-text');
-      if (battleState.isPlayerTurn) {
-        dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
-        text.innerText = "我方回合 (自動結束)";
-        text.className = "text-emerald-300";
-      } else {
-        dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse";
-        text.innerText = "敵方行動中...";
-        text.className = "text-rose-400";
-      }
-
-      // 檢查敵方是否有嘲諷怪 (No.9 深淵幻潮鯨)
+      // 檢查敵方嘲諷怪 (No.9 鯨魚)
       const hasTaunt = battleState.enemyBoard.some(m => m.id === 9);
       const bossBox = document.getElementById('enemy-hero-box');
       if (battleState.selectedAttackerIndex !== null && !hasTaunt) {
@@ -726,14 +824,14 @@
         bossBox.classList.remove('valid-target');
       }
 
-      // 渲染玩家手牌
+      // 渲染玩家手牌（可用高亮，不可用暗淡）
       const handContainer = document.getElementById('player-hand');
       handContainer.innerHTML = '';
       battleState.playerHand.forEach((card, idx) => {
         const canPlay = battleState.isPlayerTurn && battleState.playerMana >= card.cost && battleState.playerBoard.length < 3 && !battleState.isAnimating;
         const cardEl = document.createElement('div');
-        cardEl.className = `w-20 md:w-24 h-28 bg-slate-800 rounded-xl border-2 p-1.5 flex flex-col justify-between select-none transition-transform shrink-0 ${
-          canPlay ? 'border-amber-400 shadow-md hover:-translate-y-2 cursor-pointer' : 'border-slate-700 opacity-60'
+        cardEl.className = `w-20 md:w-24 h-28 bg-slate-800 rounded-xl border-2 p-1.5 flex flex-col justify-between select-none transition-all shrink-0 ${
+          canPlay ? 'playable-card cursor-pointer' : 'border-slate-700 opacity-50'
         }`;
         cardEl.innerHTML = `
           <div class="flex justify-between items-center text-[10px] font-black">
@@ -753,12 +851,14 @@
         handContainer.appendChild(cardEl);
       });
 
-      // 渲染我方與敵方戰場
+      // 渲染戰場怪獸
       renderPlayerBoard();
       renderEnemyBoard(hasTaunt);
+
+      // 觸發智慧自動換回合檢查
+      scheduleAutoTurnCheck();
     }
 
-    /* 渲染我方怪獸場地 */
     function renderPlayerBoard() {
       const container = document.getElementById('player-board');
       container.innerHTML = '';
@@ -781,7 +881,7 @@
             <div class="flex justify-between items-center w-full text-[10px]">
               <span class="text-xs">${monster.icon}</span>
               <span class="text-[9px] font-black ${monster.hasAttacked ? 'text-slate-500' : 'text-emerald-400'}">
-                ${monster.hasAttacked ? '已行動' : '可攻擊'}
+                ${monster.hasAttacked ? '已行動' : '點擊攻擊'}
               </span>
             </div>
             <div class="text-xs font-bold text-center truncate text-white">${monster.name}</div>
@@ -803,7 +903,6 @@
       }
     }
 
-    /* 渲染敵方怪獸場地 */
     function renderEnemyBoard(hasTaunt) {
       const container = document.getElementById('enemy-board');
       container.innerHTML = '';
@@ -842,21 +941,16 @@
       }
     }
 
-    /* 點選我方怪獸發動攻擊 */
     function selectAttacker(idx) {
       if (battleState.isAnimating) return;
       if (battleState.selectedAttackerIndex === idx) {
-        battleState.selectedAttackerIndex = null; // 再次點擊取消
-        document.getElementById('guide-text').innerText = "點擊綠框怪獸發動攻擊，全員行動完畢將「自動結束回合」";
+        battleState.selectedAttackerIndex = null;
       } else {
         battleState.selectedAttackerIndex = idx;
-        const attacker = battleState.playerBoard[idx];
-        document.getElementById('guide-text').innerText = `已選擇【${attacker.name}】！請點擊敵方怪獸或敵方Boss發動攻擊！`;
       }
       updateBattleUI();
     }
 
-    /* 選擇敵方怪獸作為目標 */
     function handleTargetMonster(targetIndex) {
       if (battleState.selectedAttackerIndex === null || battleState.isAnimating) return;
 
@@ -865,24 +959,19 @@
       const defender = battleState.enemyBoard[targetIndex];
 
       executeAttackAnimation(attackerIndex, targetIndex, false, () => {
-        // 計算剋制與傷害
         const mult = getElementMultiplier(attacker.element, defender.element);
         const isCrit = mult > 1.0;
         const dmg = Math.round(attacker.currentAtk * mult);
 
         defender.currentHp -= dmg;
-        attacker.currentHp -= Math.round(defender.currentAtk * 0.4); // 反擊輕傷
+        attacker.currentHp -= Math.round(defender.currentAtk * 0.4);
 
-        // 飄字
         const defEl = document.getElementById(`e-monster-${targetIndex}`);
         showFloatingDamage(defEl, dmg, isCrit);
 
-        // 魔炎龍貫通
         if (attacker.id === 8 && defender.currentHp < 0) {
           battleState.enemyHp += defender.currentHp;
         }
-
-        // 企鵝削弱攻擊
         if (attacker.id === 6) {
           defender.currentAtk = Math.max(0, defender.currentAtk - 6);
         }
@@ -891,19 +980,13 @@
         battleState.selectedAttackerIndex = null;
         checkDeadMonsters();
         updateBattleUI();
-
-        if (!checkBattleOver()) {
-          checkAutoEndTurn();
-        }
       });
     }
 
-    /* 選擇敵方 Boss 作為目標 */
     function handleTargetBoss() {
       if (battleState.selectedAttackerIndex === null || battleState.isAnimating) return;
-      // 若敵方有嘲諷怪，不可直擊 Boss
       if (battleState.enemyBoard.some(m => m.id === 9)) {
-        announce("必須先消滅敵方的深淵幻潮鯨（嘲諷）！");
+        announce("必須先消滅嘲諷怪獸！");
         return;
       }
 
@@ -920,20 +1003,13 @@
         attacker.hasAttacked = true;
         battleState.selectedAttackerIndex = null;
         updateBattleUI();
-
-        if (!checkBattleOver()) {
-          checkAutoEndTurn();
-        }
       });
     }
 
-    /* 衝擊與受擊動畫 */
     function executeAttackAnimation(attackerIdx, defenderIdx, isBossTarget, callback) {
       battleState.isAnimating = true;
       const attackerEl = document.getElementById(`p-monster-${attackerIdx}`);
-      if (attackerEl) {
-        attackerEl.classList.add('anim-dash-up');
-      }
+      if (attackerEl) attackerEl.classList.add('anim-dash-up');
 
       setTimeout(() => {
         if (isBossTarget) {
@@ -950,24 +1026,32 @@
           if (attackerEl) attackerEl.classList.remove('anim-dash-up');
           battleState.isAnimating = false;
           callback();
-        }, 200);
+        }, 150);
       }, 200);
     }
 
-    /* 自動結束回合檢測：場上所有怪獸都攻擊過，則自動換邊 */
-    function checkAutoEndTurn() {
-      if (!battleState.isPlayerTurn) return;
+    /* 智慧無縫自動換回合判定：
+       條件 1：場上怪獸全部攻擊過，且（手牌費不夠出 或 場地已滿）
+       條件 2：場上沒有怪獸能攻擊，且手牌沒任何一張能出
+    */
+    function scheduleAutoTurnCheck() {
+      if (!battleState.isPlayerTurn || battleState.isAnimating) return;
+      if (checkBattleOver()) return;
 
-      const unattacked = battleState.playerBoard.filter(m => !m.hasAttacked);
-      if (battleState.playerBoard.length > 0 && unattacked.length === 0) {
-        document.getElementById('guide-text').innerText = "⚡ 全員行動完畢，自動切換至敵方回合！";
-        setTimeout(() => {
+      clearTimeout(battleState.autoTurnCheckTimer);
+      battleState.autoTurnCheckTimer = setTimeout(() => {
+        const unattacked = battleState.playerBoard.filter(m => !m.hasAttacked);
+        const canPlayAnyHand = battleState.playerBoard.length < 3 && battleState.playerHand.some(c => c.cost <= battleState.playerMana);
+
+        const allAttacked = battleState.playerBoard.length > 0 && unattacked.length === 0;
+        const noPossibleMoves = unattacked.length === 0 && !canPlayAnyHand;
+
+        if (allAttacked || noPossibleMoves) {
           startEnemyTurnSequence();
-        }, 700);
-      }
+        }
+      }, 700);
     }
 
-    /* 出牌邏輯 */
     function playCard(index) {
       if (!battleState.isPlayerTurn || battleState.isAnimating) return;
       const card = battleState.playerHand[index];
@@ -976,7 +1060,6 @@
       battleState.playerMana -= card.cost;
       battleState.playerHand.splice(index, 1);
 
-      // 火狐具備突襲特性，進場即可攻擊；其他怪獸進場當回合可直接攻擊
       const monsterInstance = {
         ...card,
         uid: nextUid++,
@@ -985,9 +1068,7 @@
         hasAttacked: false
       };
 
-      // 進場技能
       if (card.id === 5) {
-        // 熔岩豺火傷
         if (battleState.enemyBoard.length > 0) {
           battleState.enemyBoard[0].currentHp -= 12;
           showFloatingDamage(document.getElementById('e-monster-0'), 12, true);
@@ -996,12 +1077,10 @@
           showFloatingDamage(document.getElementById('enemy-hero-box'), 12, true);
         }
       } else if (card.id === 4) {
-        // 棘刺花仙抽牌
         if (battleState.playerDeck.length > 0) {
           battleState.playerHand.push(battleState.playerDeck.pop());
         }
       } else if (card.id === 10) {
-        // 星穹噬光獸消滅敵怪
         if (battleState.enemyBoard.length > 0) {
           battleState.enemyBoard.splice(0, 1);
         }
@@ -1010,7 +1089,6 @@
       battleState.playerBoard.push(monsterInstance);
       checkDeadMonsters();
       updateBattleUI();
-      checkAutoEndTurn();
     }
 
     function getElementMultiplier(attEl, defEl) {
@@ -1026,10 +1104,10 @@
       battleState.isPlayerTurn = false;
       battleState.selectedAttackerIndex = null;
       updateBattleUI();
-      announce("敵方回合！");
+      announce("敵方回合");
 
       setTimeout(() => {
-        // 1. 敵方嘗試召喚怪獸
+        // 1. 敵方召喚
         if (battleState.enemyBoard.length < 3 && battleState.enemyHand.length > 0) {
           const card = battleState.enemyHand.pop();
           battleState.enemyBoard.push({
@@ -1041,16 +1119,15 @@
           updateBattleUI();
         }
 
-        // 2. 敵方怪獸發動攻擊（帶向下衝刺動畫）
+        // 2. 依序發起衝擊
         setTimeout(() => {
           executeEnemyAttacksSequentially(0);
-        }, 800);
-      }, 1000);
+        }, 700);
+      }, 800);
     }
 
     function executeEnemyAttacksSequentially(index) {
       if (index >= battleState.enemyBoard.length) {
-        // 敵方攻擊結束，切換回玩家回合
         finishEnemyTurn();
         return;
       }
@@ -1061,7 +1138,6 @@
 
       setTimeout(() => {
         if (battleState.playerBoard.length > 0) {
-          // 攻擊我方第一隻怪獸
           const defender = battleState.playerBoard[0];
           defender.currentHp -= attacker.currentAtk;
           attacker.currentHp -= Math.round(defender.currentAtk * 0.4);
@@ -1071,7 +1147,6 @@
           showFloatingDamage(defEl, attacker.currentAtk, false);
           setTimeout(() => defEl && defEl.classList.remove('anim-shake'), 400);
         } else {
-          // 直擊我方召喚師
           battleState.playerHp -= attacker.currentAtk;
           const pHero = document.getElementById('player-hp-bar');
           showFloatingDamage(pHero, attacker.currentAtk, false);
@@ -1084,39 +1159,34 @@
 
           if (checkBattleOver()) return;
 
-          // 遞迴下一隻敵方怪獸攻擊
-          setTimeout(() => executeEnemyAttacksSequentially(index + 1), 600);
-        }, 300);
-      }, 250);
+          setTimeout(() => executeEnemyAttacksSequentially(index + 1), 500);
+        }, 250);
+      }, 200);
     }
 
     function finishEnemyTurn() {
       checkDeadMonsters();
       if (checkBattleOver()) return;
 
-      // 重置玩家怪獸行動狀態與回血
       battleState.turn++;
-      battleState.playerMaxMana = Math.min(6, battleState.playerMaxMana + 1);
+      battleState.playerMaxMana = Math.min(8, battleState.playerMaxMana + 1);
       battleState.playerMana = battleState.playerMaxMana;
+
       battleState.playerBoard.forEach(m => {
         m.hasAttacked = false;
-        // 青芽草泥球未受傷回血被動
         if (m.id === 1) m.currentHp = Math.min(m.hp, m.currentHp + 8);
       });
 
-      // 聖鹿回血
       const holyDeer = battleState.playerBoard.find(m => m.id === 11);
       if (holyDeer) {
         battleState.playerHp = Math.min(battleState.playerMaxHp, battleState.playerHp + 15);
       }
 
-      // 雙方抽牌
       if (battleState.playerDeck.length > 0) battleState.playerHand.push(battleState.playerDeck.pop());
       if (battleState.enemyDeck.length > 0) battleState.enemyHand.push(battleState.enemyDeck.pop());
 
       battleState.isPlayerTurn = true;
-      document.getElementById('guide-text').innerText = "點擊綠框怪獸發動攻擊，全員行動完畢將「自動結束回合」";
-      announce("你的回合！");
+      announce("你的回合");
       updateBattleUI();
     }
 
@@ -1148,27 +1218,27 @@
 
       if (isVictory) {
         icon.innerText = "🏆";
-        title.innerText = "挑戰大成功！";
+        title.innerText = "討伐成功！";
         title.className = "text-2xl font-black text-amber-400";
-        desc.innerText = `成功擊潰 ${battleState.activeStage.bossName}！`;
+        desc.innerText = `成功擊潰首領 ${battleState.activeStage.bossName}！`;
 
         const goldEarned = battleState.activeStage.rewardGold;
         player.gold += goldEarned;
-        rewards.innerHTML = `<div>獲得金幣: +${goldEarned} 🪙</div>`;
+        rewards.innerHTML = `<div>獲得賞金: +${goldEarned} 🪙</div>`;
 
         if (battleState.activeStage.id > player.clearedStages) {
           player.clearedStages = battleState.activeStage.id;
         }
       } else {
         icon.innerText = "💀";
-        title.innerText = "戰敗歸城...";
+        title.innerText = "挑戰惜敗...";
         title.className = "text-2xl font-black text-rose-500";
-        desc.innerText = "召喚師體力耗盡，強化你的陣容後再次挑戰吧！";
-        rewards.innerHTML = `<div>獲得安慰獎金: +50 🪙</div>`;
+        desc.innerText = "召喚師陣容被擊潰，強化牌組後再次挑戰！";
+        rewards.innerHTML = `<div>獲得撫恤金: +50 🪙</div>`;
         player.gold += 50;
       }
 
-      saveGame();
+      saveCurrentPlayerData();
     }
 
     function exitBattle() {
@@ -1178,11 +1248,103 @@
       switchTab('stages');
     }
 
-    /* ================= 召喚祭壇抽卡系統 ================= */
+    /* ================= 5. 牌組配置系統 (嚴格唯一性) ================= */
+    function renderDeckView() {
+      // 確保牌組中沒有重複 ID
+      player.deck = [...new Set(player.deck)];
+      document.getElementById('deck-count').innerText = player.deck.length;
+
+      // 渲染已裝備牌組
+      const activeList = document.getElementById('deck-active-list');
+      activeList.innerHTML = '';
+      player.deck.forEach((id, idx) => {
+        const monster = MONSTER_DB.find(m => m.id === id);
+        if (!monster) return;
+        const el = document.createElement('div');
+        el.className = "p-2.5 bg-slate-800 rounded-xl border border-indigo-500/50 flex items-center justify-between";
+        el.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${monster.icon}</span>
+            <div>
+              <div class="text-xs font-bold text-slate-100">${monster.name}</div>
+              <div class="text-[10px] text-rose-300">⚔️${monster.atk} ❤️${monster.hp}</div>
+            </div>
+          </div>
+          <button onclick="removeCardFromDeck(${idx})" class="text-rose-400 hover:text-rose-300 text-sm px-2" title="卸下卡牌"><i class="fa-solid fa-trash-can"></i></button>
+        `;
+        activeList.appendChild(el);
+      });
+
+      // 渲染背包庫存（已在牌組中的標示已上陣，無法重複加入）
+      const poolList = document.getElementById('deck-pool-list');
+      poolList.innerHTML = '';
+      player.collection.forEach(id => {
+        const monster = MONSTER_DB.find(m => m.id === id);
+        if (!monster) return;
+        const isEquipped = player.deck.includes(id);
+
+        const el = document.createElement('div');
+        el.className = `p-2.5 rounded-xl border text-center transition ${
+          isEquipped ? 'bg-slate-900/40 border-slate-800 opacity-40 cursor-not-allowed' : 'bg-slate-900 border-slate-700 hover:border-amber-400 cursor-pointer'
+        }`;
+        el.innerHTML = `
+          <div class="text-2xl">${monster.icon}</div>
+          <div class="text-xs font-bold text-white mt-1 truncate">${monster.name}</div>
+          <div class="text-[10px] text-slate-400">⚔️${monster.atk} ❤️${monster.hp}</div>
+          <div class="text-[10px] font-black mt-1 ${isEquipped ? 'text-amber-400' : 'text-emerald-400'}">
+            ${isEquipped ? '已出征' : '+ 加入'}
+          </div>
+        `;
+        if (!isEquipped) {
+          el.onclick = () => addCardToDeck(id);
+        }
+        poolList.appendChild(el);
+      });
+    }
+
+    function addCardToDeck(id) {
+      if (player.deck.includes(id)) {
+        alert("這隻怪獸已經在你的出征陣容中囉！幻獸具有唯一性，不可重複上陣。");
+        return;
+      }
+      if (player.deck.length >= 6) {
+        alert("出征陣容上限為 6 隻幻獸，請先卸下一隻！");
+        return;
+      }
+      player.deck.push(id);
+      saveCurrentPlayerData();
+      renderDeckView();
+    }
+
+    function removeCardFromDeck(idx) {
+      if (player.deck.length <= 3) {
+        alert("陣容至少需保留 3 隻幻獸才能上場戰鬥！");
+        return;
+      }
+      player.deck.splice(idx, 1);
+      saveCurrentPlayerData();
+      renderDeckView();
+    }
+
+    function autoFillDeck() {
+      // 挑選攻擊力最高且不重複的怪獸填滿 6 張
+      const sorted = [...player.collection]
+        .map(id => MONSTER_DB.find(m => m.id === id))
+        .sort((a,b) => b.atk - a.atk);
+
+      player.deck = [];
+      for (let i = 0; i < Math.min(6, sorted.length); i++) {
+        player.deck.push(sorted[i].id);
+      }
+      saveCurrentPlayerData();
+      renderDeckView();
+    }
+
+    /* ================= 6. 召喚祭壇與圖鑑 ================= */
     function drawGacha(times) {
       const cost = times === 1 ? 100 : 900;
       if (player.gold < cost) {
-        alert("金幣不足，快去挑戰戰役關卡賺取賞金！");
+        alert("金幣不足，快去戰役關卡獲取賞金！");
         return;
       }
 
@@ -1194,14 +1356,19 @@
         pulledCards.push(getRandomMonster(isGuaranteed));
       }
 
+      // 若抽到已擁有的，轉換為 50 金幣回饋補償
+      let duplicateRefund = 0;
       pulledCards.forEach(c => {
         if (!player.collection.includes(c.id)) {
           player.collection.push(c.id);
+        } else {
+          duplicateRefund += 50;
         }
       });
 
-      saveGame();
-      showGachaModal(pulledCards);
+      player.gold += duplicateRefund;
+      saveCurrentPlayerData();
+      showGachaModal(pulledCards, duplicateRefund);
     }
 
     function getRandomMonster(guaranteeR) {
@@ -1223,7 +1390,7 @@
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
-    function showGachaModal(cards) {
+    function showGachaModal(cards, duplicateRefund) {
       const modal = document.getElementById('modal-gacha-result');
       const container = document.getElementById('gacha-cards-container');
       container.innerHTML = '';
@@ -1248,7 +1415,6 @@
       document.getElementById('modal-gacha-result').classList.add('hidden');
     }
 
-    /* ================= 幻獸圖鑑系統 ================= */
     function renderCodex() {
       const container = document.getElementById('codex-grid');
       container.innerHTML = '';
@@ -1260,9 +1426,7 @@
 
         const card = document.createElement('div');
         card.className = `p-3 rounded-xl border flex flex-col items-center text-center transition ${
-          isUnlocked 
-            ? 'bg-slate-900 border-slate-700 hover:border-amber-400' 
-            : 'bg-slate-950/60 border-slate-900 opacity-40'
+          isUnlocked ? 'bg-slate-900 border-slate-700 hover:border-amber-400' : 'bg-slate-950/60 border-slate-900 opacity-40'
         }`;
 
         card.innerHTML = `
@@ -1277,81 +1441,6 @@
 
       document.getElementById('codex-progress').innerText = `${unlockedCount}/${MONSTER_DB.length}`;
     }
-
-    /* ================= 牌組配置系統 ================= */
-    function renderDeckView() {
-      document.getElementById('deck-count').innerText = player.deck.length;
-
-      const activeList = document.getElementById('deck-active-list');
-      activeList.innerHTML = '';
-      player.deck.forEach((id, idx) => {
-        const monster = MONSTER_DB.find(m => m.id === id);
-        if (!monster) return;
-        const el = document.createElement('div');
-        el.className = "p-2 bg-slate-800 rounded-lg border border-indigo-500/50 flex items-center justify-between";
-        el.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-lg">${monster.icon}</span>
-            <div>
-              <div class="text-xs font-bold text-slate-100">${monster.name}</div>
-              <div class="text-[10px] text-rose-300">⚔️${monster.atk} ❤️${monster.hp}</div>
-            </div>
-          </div>
-          <button onclick="removeCardFromDeck(${idx})" class="text-rose-400 hover:text-rose-300 text-xs px-1.5"><i class="fa-solid fa-xmark"></i></button>
-        `;
-        activeList.appendChild(el);
-      });
-
-      const poolList = document.getElementById('deck-pool-list');
-      poolList.innerHTML = '';
-      player.collection.forEach(id => {
-        const monster = MONSTER_DB.find(m => m.id === id);
-        if (!monster) return;
-        const el = document.createElement('div');
-        el.className = "p-2.5 bg-slate-900 border border-slate-700 hover:border-amber-400 rounded-lg cursor-pointer text-center transition";
-        el.innerHTML = `
-          <div class="text-2xl">${monster.icon}</div>
-          <div class="text-xs font-bold text-white mt-1 truncate">${monster.name}</div>
-          <div class="text-[10px] text-slate-400">⚔️${monster.atk} ❤️${monster.hp}</div>
-        `;
-        el.onclick = () => addCardToDeck(id);
-        poolList.appendChild(el);
-      });
-    }
-
-    function addCardToDeck(id) {
-      if (player.deck.length >= 8) {
-        alert("牌組已滿 8 張，請先移除一張！");
-        return;
-      }
-      player.deck.push(id);
-      saveGame();
-      renderDeckView();
-    }
-
-    function removeCardFromDeck(idx) {
-      if (player.deck.length <= 4) {
-        alert("牌組至少需保留 4 張卡牌！");
-        return;
-      }
-      player.deck.splice(idx, 1);
-      saveGame();
-      renderDeckView();
-    }
-
-    function autoFillDeck() {
-      const sorted = [...player.collection].map(id => MONSTER_DB.find(m => m.id === id)).sort((a,b) => b.atk - a.atk);
-      player.deck = [];
-      for (let i = 0; i < 8; i++) {
-        player.deck.push(sorted[i % sorted.length].id);
-      }
-      saveGame();
-      renderDeckView();
-    }
-
-    window.onload = () => {
-      loadGame();
-    };
   </script>
 </body>
 </html>
