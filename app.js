@@ -1,4 +1,33 @@
-/* ================= 1. 幻獸資料庫 (全 34 隻圖鑑) ================= */
+/* ================= Firebase SDK 載入與初始化 ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  arrayUnion, 
+  onSnapshot 
+} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCs4w7IIxxpl3_SWIVZ9IRaoN0YVA2NvMc",
+  authDomain: "monster-duel-cc061.firebaseapp.com",
+  projectId: "monster-duel-cc061",
+  storageBucket: "monster-duel-cc061.firebasestorage.app",
+  messagingSenderId: "303521746084",
+  appId: "1:303521746084:web:e9541d1d31d15019d46a31",
+  measurementId: "G-SKEPDJWZGM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ================= 1. 幻獸資料庫 (34 隻全圖鑑) ================= */
 const MONSTER_DB = [
   { id: 1, name: "青芽草泥球", rarity: "N", element: "grass", cost: 1, baseAtk: 14, baseHp: 28, desc: "未受傷時自我修復 8 點生命", faIcon: "fa-seedling", evolvableTo: 101 },
   { id: 2, name: "赤耳火狐", rarity: "N", element: "fire", cost: 1, baseAtk: 18, baseHp: 18, desc: "【突襲】登場可立即發動攻擊", faIcon: "fa-fire", evolvableTo: 102 },
@@ -36,7 +65,7 @@ const MONSTER_DB = [
   { id: 117, name: "太古虛空終焉帝", rarity: "SSR", element: "void", cost: 8, baseAtk: 88, baseHp: 95, desc: "【神話威壓】雙方所有打出的卡牌消耗翻倍", faIcon: "fa-infinity", evolvableTo: null }
 ];
 
-/* ================= 2. 戰役章節資料庫 (8 大戰役) ================= */
+/* ================= 2. 戰役章節資料庫 ================= */
 const STAGES_DB = [
   { id: 1, title: "第 1 區：微光森林外圍", desc: "草水小怪出沒，掉落蒼翠靈石與強化石。", bossName: "森林巨蜂王", bossElement: "grass", bossHp: 70, bossIcon: "fa-bug", rewardGold: 220, rewardExp: 60, dropStone: 3, dropMaterial: "grass_stone", deck: [1, 3, 4] },
   { id: 2, title: "第 2 區：灼熱焦土裂谷", desc: "烈焰怪獸攻勢兇猛，掉落烈焰結晶！", bossName: "熔岩魔石像", bossElement: "fire", bossHp: 110, bossIcon: "fa-mountain", rewardGold: 380, rewardExp: 90, dropStone: 4, dropMaterial: "fire_stone", deck: [2, 5, 8] },
@@ -70,20 +99,21 @@ const MATERIAL_DB = {
   void_stone: { name: "虛空星核", icon: "fa-circle-dot", rarity: "SSR", desc: "天外隕落的微型黑洞殘核，具備扭曲現實的神秘威能。" }
 };
 
-/* ================= 5. 新手教學資料 ================= */
+/* ================= 5. 新手教學步驟資料 ================= */
 let currentTutorialStep = 0;
 const TUTORIAL_STEPS = [
-  { icon: "fa-dragon", title: "召喚之陣與出征", desc: "歡迎來到幻獸大陸！你可以從祭壇召喚專屬幻獸，並在「牌組」頁面挑選 4~6 隻獨特幻獸組合出征。" },
-  { icon: "fa-burst", title: "自動突襲與屬性", desc: "戰鬥中打出怪獸會立即自動發動衝擊！火克草、草克水、水克火，抓住剋制倍率打出巨大暴擊！" },
-  { icon: "fa-star", title: "升級成長與生命", desc: "戰鬥獲取召喚師經驗。每升 1 級最大生命值永久 +20，怪獸滿等 Lv.5 後更可消耗靈石覺醒為究極神話形態！" }
+  { icon: "fa-dragon", title: "契約締結！召喚出征", desc: "歡迎加入《幻獸啟示錄》！身為初出茅廬的召喚師，你已獲得一套專屬的初代幻獸陣容，前往「牌組」可自由調整出征名單！" },
+  { icon: "fa-burst", title: "衝鋒突襲！屬性剋制", desc: "戰鬥中打出怪獸會立刻發動自動衝擊！記住屬性相剋：烈焰克蒼翠、蒼翠克深海、深海克烈焰，剋制時造成 1.35 倍暴擊！" },
+  { icon: "fa-star", title: "磨礪晉升！神化覺醒", desc: "通關戰役升級可永久提升生命值上限！怪獸達到 Lv.5 滿等後，更可在「牌組養成」使用戰役掉落的靈石覺醒為究極神話形態！" }
 ];
 
-/* ================= 6. 核心變數與狀態 ================= */
+/* ================= 6. 核心狀態 ================= */
 let currentAccount = null;
 let player = null;
 let selectedUpgradeCardId = null;
 let isShowingCompletedAchievements = false;
 let staminaInterval = null;
+let firestoreUnsubscribe = null;
 let nextUid = 1;
 
 let battleState = {
@@ -106,7 +136,7 @@ let battleState = {
   autoTurnTimer: null
 };
 
-/* ================= 7. 等級模型與體力恢復 ================= */
+/* ================= 7. 等級模型與體力 ================= */
 function getMaxExpForLevel(lvl) {
   return lvl * 100;
 }
@@ -144,55 +174,68 @@ function closeLevelUpModal() {
   document.getElementById('modal-level-up').classList.add('hidden');
 }
 
-/* ================= 8. 存檔與玩家管理 (LocalStorage) ================= */
-function getAllAccounts() {
-  const data = localStorage.getItem('monster_game_accounts');
-  return data ? JSON.parse(data) : {};
-}
-
-function saveAllAccounts(accs) {
-  localStorage.setItem('monster_game_accounts', JSON.stringify(accs));
-}
-
-function saveCurrentPlayerData() {
+/* ================= 8. Firebase Firestore 雲端同步 ================= */
+async function saveCurrentPlayerData() {
   if (!currentAccount || !player) return;
-  const accs = getAllAccounts();
-  if (accs[currentAccount]) {
-    accs[currentAccount].playerData = player;
-    saveAllAccounts(accs);
-  }
   updateTopBar();
   updateHomeView();
   updateNotificationBadges();
+
+  try {
+    const userDocRef = doc(db, "users", currentAccount);
+    await setDoc(userDocRef, {
+      playerData: player
+    }, { merge: true });
+  } catch (err) {
+    console.error("雲端存檔同步失敗:", err);
+  }
 }
 
-function handleAuth(isLoginMode) {
+function listenToUserDoc() {
+  if (firestoreUnsubscribe) firestoreUnsubscribe();
+  const userDocRef = doc(db, "users", currentAccount);
+  firestoreUnsubscribe = onSnapshot(userDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const remoteData = docSnap.data().playerData;
+      if (remoteData) {
+        player.friendRequests = remoteData.friendRequests || [];
+        player.friends = remoteData.friends || [];
+        updateNotificationBadges();
+        renderFriendRequests();
+        renderFriendsList();
+      }
+    }
+  });
+}
+
+async function handleAuth(isLoginMode) {
   const user = document.getElementById('login-username').value.trim();
   const pass = document.getElementById('login-password').value.trim();
   if (!user || !pass) {
     alert("請輸入冒險者帳號與密碼！");
     return;
   }
-  const accs = getAllAccounts();
 
-  if (isLoginMode) {
-    if (!accs[user] || accs[user].password !== pass) {
-      alert("帳號不存在或密碼錯誤！若未註冊請點擊「註冊新帳號」");
-      return;
-    }
-    currentAccount = user;
-    player = accs[user].playerData;
-    ensurePlayerSchema();
-    enterGameWorld();
-  } else {
-    if (accs[user]) {
-      alert("此帳號名稱已被註冊，請換一個或直接登入！");
-      return;
-    }
-    const generatedId = "#" + Math.floor(1000 + Math.random() * 9000);
-    accs[user] = {
-      password: pass,
-      playerData: {
+  try {
+    const userDocRef = doc(db, "users", user);
+    const docSnap = await getDoc(userDocRef);
+
+    if (isLoginMode) {
+      if (!docSnap.exists() || docSnap.data().password !== pass) {
+        alert("帳號不存在或密碼錯誤！若未註冊請點擊「註冊新帳號」");
+        return;
+      }
+      currentAccount = user;
+      player = docSnap.data().playerData;
+      ensurePlayerSchema();
+      enterGameWorld();
+    } else {
+      if (docSnap.exists()) {
+        alert("此帳號名稱已被註冊，請換一個或直接登入！");
+        return;
+      }
+      const generatedId = "#" + Math.floor(1000 + Math.random() * 9000);
+      const newPlayerData = {
         id: generatedId,
         name: user,
         title: "初心召喚師",
@@ -210,13 +253,21 @@ function handleAuth(isLoginMode) {
         claimedAchievements: [],
         friends: [],
         friendRequests: [],
-        hasCompletedTutorial: false
-      }
-    };
-    saveAllAccounts(accs);
-    currentAccount = user;
-    player = accs[user].playerData;
-    enterGameWorld();
+        hasCompletedTutorial: false // 新註冊帳號觸發引導動畫
+      };
+
+      await setDoc(userDocRef, {
+        password: pass,
+        playerData: newPlayerData
+      });
+
+      currentAccount = user;
+      player = newPlayerData;
+      enterGameWorld();
+    }
+  } catch (err) {
+    console.error("Firebase 連線錯誤:", err);
+    alert("連線資料庫失敗，請確認網路連線！");
   }
 }
 
@@ -277,11 +328,13 @@ function enterGameWorld() {
   updateTopBar();
   startStaminaTimer();
   switchTab('home');
-  checkAndShowTutorial();
+  checkAndShowTutorial(); // 檢查並播放新手教學引導動畫
   updateNotificationBadges();
+  listenToUserDoc();
 }
 
 function handleLogout() {
+  if (firestoreUnsubscribe) firestoreUnsubscribe();
   clearInterval(staminaInterval);
   currentAccount = null;
   player = null;
@@ -345,19 +398,16 @@ function updateHomeView() {
   }
 }
 
-/* ================= 9. 紅色圓點通知徽章系統 ================= */
+/* ================= 9. 紅色圓點通知徽章系統 (即時刷新) ================= */
 function updateNotificationBadges() {
   if (!player) return;
 
-  // 1. 檢查是否有未領取的成就
   const hasClaimableAchievement = ACHIEVEMENTS_DB.some(ach => {
     return ach.check(player) && !player.claimedAchievements.includes(ach.id);
   });
 
-  // 2. 檢查是否有待審核的好友申請
   const hasPendingFriendRequests = (player.friendRequests || []).length > 0;
 
-  // 更新下拉選單內的個別紅點
   const achBadge = document.getElementById('achievements-badge');
   if (achBadge) {
     if (hasClaimableAchievement) achBadge.classList.remove('hidden');
@@ -370,7 +420,6 @@ function updateNotificationBadges() {
     else frBadge.classList.add('hidden');
   }
 
-  // 頂部選單按鈕的總紅點通知
   const menuBadge = document.getElementById('menu-badge');
   if (menuBadge) {
     if (hasClaimableAchievement || hasPendingFriendRequests) {
@@ -385,7 +434,9 @@ function updateNotificationBadges() {
 function checkAndShowTutorial() {
   if (player && !player.hasCompletedTutorial) {
     currentTutorialStep = 0;
-    showTutorialModal();
+    setTimeout(() => {
+      showTutorialModal();
+    }, 400);
   }
 }
 
@@ -421,7 +472,7 @@ function nextTutorialStep() {
   }
 }
 
-/* ================= 11. 選單與分頁導覽 (防冒泡修復) ================= */
+/* ================= 11. 選單與分頁導覽 ================= */
 function toggleDropdownMenu(e) {
   if (e) e.stopPropagation();
   const menu = document.getElementById('dropdown-menu');
@@ -435,7 +486,6 @@ function closeDropdownMenu(e) {
   }
 }
 
-// 阻止事件冒泡確保選單內按鈕確實執行
 function handleMenuClick(e, callback) {
   if (e) e.stopPropagation();
   closeDropdownMenu();
@@ -465,7 +515,7 @@ function switchTab(tabId) {
   if (tabId === 'deck') renderDeckView();
 }
 
-/* ================= 12. 個人檔案、稱號與好友 ================= */
+/* ================= 12. 好友與指南彈窗 ================= */
 function openProfileModal() {
   document.getElementById('profile-my-id').innerText = player.id || "#8888";
   document.getElementById('profile-input-name').value = player.name;
@@ -522,26 +572,42 @@ function openFriendsModal() {
 }
 function closeFriendsModal() { document.getElementById('modal-friends').classList.add('hidden'); }
 
-function sendFriendRequest() {
+async function sendFriendRequest() {
   const targetId = document.getElementById('friend-input-target-id').value.trim();
   if (!targetId) { alert("請輸入對方的召喚師 ID！"); return; }
   if (targetId === player.id) { alert("不能向自己發送好友申請！"); return; }
   if (player.friends.some(f => f.id === targetId)) { alert("對方已在好友名單中！"); return; }
 
-  document.getElementById('friend-input-target-id').value = '';
-  alert(`已向召喚師【${targetId}】發送好友邀請！等待對方審核。`);
+  try {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("playerData.id", "==", targetId));
+    const querySnapshot = await getDocs(q);
 
-  setTimeout(() => {
-    if (!player.friendRequests) player.friendRequests = [];
-    player.friendRequests.push({
-      id: targetId,
-      name: "法師" + targetId.replace('#', '_'),
-      title: "星界遊俠",
-      level: Math.floor(Math.random() * 10) + 3
+    if (querySnapshot.empty) {
+      alert(`找不到 ID 為【${targetId}】的召喚師，請確認 ID 是否正確！`);
+      return;
+    }
+
+    let targetDocId = null;
+    querySnapshot.forEach((d) => { targetDocId = d.id; });
+
+    const targetUserRef = doc(db, "users", targetDocId);
+    await updateDoc(targetUserRef, {
+      "playerData.friendRequests": arrayUnion({
+        id: player.id,
+        name: player.name,
+        title: player.title,
+        level: player.level,
+        accountDocId: currentAccount
+      })
     });
-    saveCurrentPlayerData();
-    renderFriendRequests();
-  }, 1500);
+
+    document.getElementById('friend-input-target-id').value = '';
+    alert(`已向召喚師【${targetId}】發送好友邀請！等待對方審核。`);
+  } catch (err) {
+    console.error("發送好友申請失敗:", err);
+    alert("發送申請失敗，請稍後再試！");
+  }
 }
 
 function renderFriendRequests() {
@@ -572,19 +638,40 @@ function renderFriendRequests() {
   });
 }
 
-function acceptFriendRequest(idx) {
+async function acceptFriendRequest(idx) {
   const req = player.friendRequests[idx];
   player.friends.push({
     id: req.id,
     name: req.name,
     title: req.title,
     level: req.level,
+    accountDocId: req.accountDocId,
     giftSent: false
   });
   player.friendRequests.splice(idx, 1);
   saveCurrentPlayerData();
+
+  if (req.accountDocId) {
+    try {
+      const originUserRef = doc(db, "users", req.accountDocId);
+      await updateDoc(originUserRef, {
+        "playerData.friends": arrayUnion({
+          id: player.id,
+          name: player.name,
+          title: player.title,
+          level: player.level,
+          accountDocId: currentAccount,
+          giftSent: false
+        })
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   renderFriendRequests();
   renderFriendsList();
+  updateNotificationBadges();
   alert(`已同意申請！與【${req.name}】正式成為好友！`);
 }
 
@@ -592,6 +679,7 @@ function rejectFriendRequest(idx) {
   player.friendRequests.splice(idx, 1);
   saveCurrentPlayerData();
   renderFriendRequests();
+  updateNotificationBadges();
 }
 
 function renderFriendsList() {
@@ -736,9 +824,10 @@ function claimAchievement(achId) {
 
   saveCurrentPlayerData();
   switchAchievementTab(isShowingCompletedAchievements);
+  updateNotificationBadges();
 }
 
-/* ================= 14. 格子背包 (Item Grid) ================= */
+/* ================= 14. 背包系統 ================= */
 function openInventoryModal() {
   const grid = document.getElementById('inventory-grid');
   grid.innerHTML = '';
@@ -782,7 +871,7 @@ function openItemDetail(itemKey) {
 }
 function closeItemDetailModal() { document.getElementById('modal-item-detail').classList.add('hidden'); }
 
-/* ================= 15. 卡牌數值與升級進化 ================= */
+/* ================= 15. 卡牌養成與滿等進化 ================= */
 function getMonsterStats(id) {
   const monster = MONSTER_DB.find(m => m.id === id);
   const level = (player && player.cardLevels && player.cardLevels[id]) || 1;
@@ -1401,6 +1490,7 @@ function endBattle(isVictory) {
   }
 
   saveCurrentPlayerData();
+  updateNotificationBadges();
 }
 
 function exitBattle() {
